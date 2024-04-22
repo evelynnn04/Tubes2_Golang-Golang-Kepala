@@ -3,3 +3,5 @@
 
 # Folders
 .vscode
+dist
+node_modules
