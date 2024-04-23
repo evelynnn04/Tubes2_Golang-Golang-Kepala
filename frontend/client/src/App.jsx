@@ -3,22 +3,25 @@ import axios from 'axios';
 import { Input, Card } from 'antd';
 import debounce from 'lodash/debounce';
 import * as d3 from 'd3';
+import "./App.css"
 
 // Global variabel
 var fromLink, toLink, graphData;
 
 // Gambar grafik multiple solution
 function graph() {
-  const svg = d3.select('#canvas').html('');
-  const width = 600;
-  const height = 600;
+  const canvas = document.getElementById('canvas');
+  const width = canvas.clientWidth;
+  const height = canvas.clientHeight;
 
+  const svg = d3.select('#canvas').html('');
+  
   // Dummy buat ngetes doang
   graphData = {
     nodes: [
-      { name: '1' },
+      { name: '1', id: "from" },
       { name: '2' },
-      { name: '3' },
+      { name: '3', id: "to" },
       { name: '4' },
       { name: '5' },
     ],
@@ -32,6 +35,8 @@ function graph() {
     ],
   };
 
+  const radius = width / (graphData.nodes.length * 20);
+
   // Gambar line
   const link = svg
     .append('g')
@@ -39,8 +44,8 @@ function graph() {
     .data(graphData.links)
     .enter()
     .append('line')
-    .attr('stroke-width', 3)
-    .style('stroke', 'pink');
+    .attr('stroke-width', 1)
+    .style('stroke', '#c5c6c7');
 
   // Gambar node
   const node = svg
@@ -49,9 +54,8 @@ function graph() {
     .data(graphData.nodes)
     .enter()
     .append('circle')
-    .attr('fill', 'orange')
-    .style('stroke', 'yellow')
-    .attr('r', 5);
+    .attr('fill', (d) => (d.id === 'from' || d.id === 'to' ? '#66FCF1' : '#c5c6c7'))
+    .attr('r', radius);
 
   // Gambar text
   const nodeNameText = svg
@@ -64,9 +68,7 @@ function graph() {
     .attr('text-anchor', 'middle')
     .attr('alignment-baseline', 'hanging')
     .style('font-size', '12px')
-    .style('fill', 'white')
-    .attr('x', (d) => d.x)
-    .attr('y', (d) => d.y + 10);
+    .style('fill', 'white');
 
   function ticked() {
     link
@@ -80,29 +82,30 @@ function graph() {
     nodeNameText.attr('x', (d) => d.x).attr('y', (d) => d.y + 10);
   }
 
-  d3.forceSimulation(graphData.nodes)
+  const simulation = d3.forceSimulation(graphData.nodes)
     .force('link', d3.forceLink(graphData.links).id((d) => d.name))
     .force('charge', d3.forceManyBody())
     .force('center', d3.forceCenter(width / 2, height / 3))
     .on('tick', ticked);
+
+  // Update simulation forces when the window is resized
+  window.addEventListener('resize', () => {
+    const newWidth = canvas.clientWidth;
+    const newHeight = canvas.clientHeight;
+    simulation.force('center', d3.forceCenter(newWidth / 2, newHeight / 3));
+    simulation.alpha(1).restart(); // Restart simulation to apply changes
+  });
 }
 
+
 async function handleSubmit() {
-  // const fromValue = document.getElementById('from-field').value;
-  // const toValue = document.getElementById('to-field').value;
-  // const fromLink = 'https://en.wikipedia.org/wiki/' + fromValue;
-  // const toLink = 'https://en.wikipedia.org/wiki/' + toValue;
-
-  // const data = {
-  //   from: fromLink,
-  //   to: toLink,
-  // };
-
-  // Dummy data kalo mau coba connect ke backend
+  
   const data = {
-    from: "https://en.wikipedia.org/wiki/Fire",
-    to: "https://en.wikipedia.org/wiki/Water",
+    from: fromLink,
+    to: toLink,
   };
+
+  console.log(data);
 
   fetch('/save-data', {
     method: 'POST',
@@ -130,62 +133,92 @@ function makeLink(str) {
   return link;
 }
 
+// Tambahin div loading 
+
+
 function App() {
-  const [inputMatch, setInputMatch] = useState([]);
+  const [fromInputMatch, setFromInputMatch] = useState([]);
+  const [toInputMatch, setToInputMatch] = useState([]);
   const [selectedCard, setSelectedCard] = useState(null);
+  const [showCardTo, setShowCardTo] = useState(true);
+  const [showCardFrom, setShowCardFrom] = useState(true);
+  const [fromValue, setFromValue] = useState(null);
+  const [toValue, setToValue] = useState(null);
 
   useEffect(() => {
-    loadInput();
+    loadInputFrom();
+    loadInputTo();
   }, []);
 
-  const loadInput = async () => {
+  const loadInputFrom = async () => {
+    console.log(showCardFrom);
     try {
       const response = await axios.get(
         `https://en.wikipedia.org/w/api.php?action=query&format=json&formatversion=2&origin=*&list=search&srsearch=`
       );
-      console.log(response.status);
-      console.log('Response data:', response.data);
-      setInputMatch(response.data.query);
+      setFromInputMatch(response.data.query);
     } catch (error) {
       console.error(error);
     }
   };
 
-  const searchInput = debounce(async (text) => {
+  const searchInputFrom = debounce(async (text) => {
+    setFromValue(text);
     try {
       const response = await axios.get(
         `https://en.wikipedia.org/w/api.php?action=query&format=json&formatversion=2&origin=*&list=search&srsearch=${text}`
       );
-      setInputMatch(response.data.query.search);
-      console.log(response.status);
+      setFromInputMatch(response.data.query.search);
+      setShowCardFrom(true);
     } catch (error) {
       console.error(error);
     }
   }, 50);
 
-  const setFromLink = (link) => {
-    fromLink = link;
-  };
-
-  const setToLink = (link) => {
-    fromLink = link;
-  };
-  
-  const handleCardClick = (item) => {
-    setSelectedCard(item);
-    if (item) {
-      const link = makeLink(item.title);
-      const selectedInput = document.activeElement.id;
-      if (selectedInput === 'from-field') {
-        setFromLink(link);
-      } else if (selectedInput === 'to-field') {
-        setToLink(link);
-      }
+  const loadInputTo = async () => {
+    console.log(showCardTo);
+    try {
+      const response = await axios.get(
+        `https://en.wikipedia.org/w/api.php?action=query&format=json&formatversion=2&origin=*&list=search&srsearch=`
+      );
+      setToInputMatch(response.data.query);
+    } catch (error) {
+      console.error(error);
     }
   };
-  
+
+  const searchInputTo = debounce(async (text) => {
+    setToValue(text);
+    try {
+      const response = await axios.get(
+        `https://en.wikipedia.org/w/api.php?action=query&format=json&formatversion=2&origin=*&list=search&srsearch=${text}`
+      );
+      setToInputMatch(response.data.query.search);
+      setShowCardTo(true);
+    } catch (error) {
+      console.error(error);
+    }
+  }, 50);
+
+  const handleCardClickFrom = (item) => {
+    setShowCardFrom(false);
+    setSelectedCard(item);
+    fromLink = makeLink(item.title);
+    setFromValue(item.title);
+    console.log(fromLink);
+  };
+
+  const handleCardClickTo = (item) => {
+    setShowCardTo(false);
+    setSelectedCard(item);
+    toLink = makeLink(item.title);
+    setToValue(item.title);
+    console.log(toLink);
+  };
+
   return (
-    <div className="container">
+
+    <div className="container" style={{ position: 'relative' }}>
       <div id="content-top">
         <h1>WIKIRACE</h1>
         <h2>Presented by Golang-Golang Kepala</h2>
@@ -195,41 +228,51 @@ function App() {
           <form>
             <label htmlFor="from-field">From</label> <br />
             <Input
-              onChange={(e) => searchInput(e.target.value)}
+              onChange={(e) => searchInputFrom(e.target.value)}
               type="text"
               id="from-field"
               name="From"
               placeholder="Enter text here"
+              value= {fromValue}
             />
-              {inputMatch &&
-                inputMatch.map((item, index) => (
-                  <div key={index}>
-                    {selectedCard === item ? (
-                      <Card disabled>{item.title}</Card>
-                    ) : (
-                      <Card onClick={() => handleCardClick(item)}>{fromLink}</Card>
-                    )}
-                  </div>
-                ))}
+            <div>
+              {showCardFrom &&
+                fromInputMatch &&
+                  fromInputMatch.slice(0, 3).map((item, index) => (
+                    <div key={index} style={{width: '80%'}}>
+                      {selectedCard === item ? (
+                        <Card>{item.title}</Card>
+                      ) : (
+                        <Card id="cardFrom" onClick={() => handleCardClickFrom(item)}>{item.title}</Card>
+                      )}
+                    </div>
+                  ))
+               }
+            </div>
             <br />
-            <label htmlFor="to-field">From</label> <br />
+            <label htmlFor="to-field">To</label> <br />
             <Input
-              onChange={(e) => searchInput(e.target.value)}
+              onChange={(e) => searchInputTo(e.target.value)}
               type="text"
               id="to-field"
-              name="From"
+              name="To"
               placeholder="Enter text here"
+              value= {toValue}
             />
-              {inputMatch &&
-                inputMatch.map((item, index) => (
-                  <div key={index}>
-                    {selectedCard === item ? (
-                      <Card disabled>{item.title}</Card>
-                    ) : (
-                      <Card onClick={() => handleCardClick(item)}>{toLink}</Card>
-                    )}
-                  </div>
-                ))}
+            <div>
+              {showCardTo &&
+                toInputMatch &&
+                  toInputMatch.slice(0, 3).map((item, index) => (
+                    <div key={index} style={{width: '80%'}}>
+                      {selectedCard === item ? (
+                        <Card>{item.title}</Card>
+                      ) : (
+                        <Card id="cardTo" onClick={() => handleCardClickTo(item)}>{item.title}</Card>
+                      )}
+                    </div>
+                  ))
+               }
+            </div>
             <br />
             <button type="button" onClick={handleSubmit}>
               Find
@@ -247,3 +290,4 @@ function App() {
 }
 
 export default App;
+
