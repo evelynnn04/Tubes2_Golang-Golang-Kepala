@@ -4,12 +4,17 @@ import { Input, Card } from 'antd';
 import debounce from 'lodash/debounce';
 import * as d3 from 'd3';
 
+// Global variabel
+var fromLink, toLink, graphData;
+
+// Gambar grafik multiple solution
 function graph() {
   const svg = d3.select('#canvas').html('');
   const width = 600;
   const height = 600;
 
-  const graphData = {
+  // Dummy buat ngetes doang
+  graphData = {
     nodes: [
       { name: '1' },
       { name: '2' },
@@ -27,6 +32,7 @@ function graph() {
     ],
   };
 
+  // Gambar line
   const link = svg
     .append('g')
     .selectAll('line')
@@ -36,6 +42,7 @@ function graph() {
     .attr('stroke-width', 3)
     .style('stroke', 'pink');
 
+  // Gambar node
   const node = svg
     .append('g')
     .selectAll('circle')
@@ -46,6 +53,7 @@ function graph() {
     .style('stroke', 'yellow')
     .attr('r', 5);
 
+  // Gambar text
   const nodeNameText = svg
     .append('g')
     .selectAll('text')
@@ -80,14 +88,20 @@ function graph() {
 }
 
 async function handleSubmit() {
-  const fromValue = document.getElementById('from-field').value;
-  const toValue = document.getElementById('to-field').value;
-  const fromLink = 'https://en.wikipedia.org/wiki/' + fromValue;
-  const toLink = 'https://en.wikipedia.org/wiki/' + toValue;
+  // const fromValue = document.getElementById('from-field').value;
+  // const toValue = document.getElementById('to-field').value;
+  // const fromLink = 'https://en.wikipedia.org/wiki/' + fromValue;
+  // const toLink = 'https://en.wikipedia.org/wiki/' + toValue;
 
+  // const data = {
+  //   from: fromLink,
+  //   to: toLink,
+  // };
+
+  // Dummy data kalo mau coba connect ke backend
   const data = {
-    from: fromLink,
-    to: toLink,
+    from: "https://en.wikipedia.org/wiki/Fire",
+    to: "https://en.wikipedia.org/wiki/Water",
   };
 
   fetch('/save-data', {
@@ -100,6 +114,8 @@ async function handleSubmit() {
         throw new Error('Error saving data');
       }
       console.log('Data saved successfully!');
+      console.log(fromLink);
+      console.log(toLink);
     })
     .catch((error) => {
       console.error('Error:', error);
@@ -107,10 +123,10 @@ async function handleSubmit() {
   graph();
 }
 
+// Convert title jadi link
 function makeLink(str) {
-  // const temp1 = str.replace(/\b\w/g, (char) => char.toUpperCase());
-  const temp2 = str.replace(/\s+/g, '_');
-  const link = "https://en.wikipedia.org/wiki/" + temp2;
+  const temp = str.replace(/\s+/g, '_');
+  const link = "https://en.wikipedia.org/wiki/" + temp;
   return link;
 }
 
@@ -147,15 +163,24 @@ function App() {
     }
   }, 50);
 
+  const setFromLink = (link) => {
+    fromLink = link;
+  };
+
+  const setToLink = (link) => {
+    fromLink = link;
+  };
+  
   const handleCardClick = (item) => {
     setSelectedCard(item);
     if (item) {
-      console.log('Selected card:', item);
-      console.log("actual: " + item.link);
-      const itemSelected = makeLink(item.title);
-      console.log("selected: " + itemSelected);
-    } else {
-      console.log('No card selected');
+      const link = makeLink(item.title);
+      const selectedInput = document.activeElement.id;
+      if (selectedInput === 'from-field') {
+        setFromLink(link);
+      } else if (selectedInput === 'to-field') {
+        setToLink(link);
+      }
     }
   };
   
@@ -182,7 +207,7 @@ function App() {
                     {selectedCard === item ? (
                       <Card disabled>{item.title}</Card>
                     ) : (
-                      <Card onClick={() => handleCardClick(item)}>{item.title}</Card>
+                      <Card onClick={() => handleCardClick(item)}>{fromLink}</Card>
                     )}
                   </div>
                 ))}
@@ -201,7 +226,7 @@ function App() {
                     {selectedCard === item ? (
                       <Card disabled>{item.title}</Card>
                     ) : (
-                      <Card onClick={() => handleCardClick(item)}>{item.title}</Card>
+                      <Card onClick={() => handleCardClick(item)}>{toLink}</Card>
                     )}
                   </div>
                 ))}
