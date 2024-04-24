@@ -92,7 +92,7 @@ form {
 label {
   display: block;
   color: #66FCF1;
-  font-size: 25px;
+  font-size: 20px;
 }
 
 input[type="text"]{
@@ -134,3 +134,22 @@ button:hover {
   margin-left: 0;
 }
 
+#methodOption {
+  font-size: 20px;
+  /* font-weight: bold; */
+  margin-bottom: 10px;
+}
+
+#method {
+  padding: 5px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  width: 200px;
+  width: 30%;
+  background-color:#0b0c10;
+  color: #c5c6c7;
+}
+
+#method option {
+  padding: 5px;
+}

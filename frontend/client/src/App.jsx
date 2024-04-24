@@ -24,6 +24,9 @@ function graph() {
       { name: '3', id: "to" },
       { name: '4' },
       { name: '5' },
+      { name: '6' },
+      { name: '7' },
+      { name: '8' },
     ],
     links: [
       { source: '1', target: '2' },
@@ -31,11 +34,14 @@ function graph() {
       { source: '1', target: '4' },
       { source: '4', target: '3' },
       { source: '1', target: '5' },
-      { source: '5', target: '3' },
+      { source: '5', target: '6' },
+      { source: '6', target: '7' },
+      { source: '7', target: '8' },
+      { source: '2', target: '8' },
     ],
   };
 
-  const radius = width / (graphData.nodes.length * 20);
+  const radius = 5; // Ini diadjust aja
 
   // Gambar line
   const link = svg
@@ -82,48 +88,49 @@ function graph() {
     nodeNameText.attr('x', (d) => d.x).attr('y', (d) => d.y + 10);
   }
 
+  let zoom = d3.zoom()
+  .on('zoom', handleZoom);
+
+  function handleZoom(e) {
+    const currentTransform = e.transform;
+    const radius = 5 * currentTransform.k;
+  
+    d3.selectAll('line')
+      .attr('x1', (d) => currentTransform.applyX(d.source.x))
+      .attr('y1', (d) => currentTransform.applyY(d.source.y))
+      .attr('x2', (d) => currentTransform.applyX(d.target.x))
+      .attr('y2', (d) => currentTransform.applyY(d.target.y));
+  
+    d3.selectAll('circle')
+      .attr('cx', (d) => currentTransform.applyX(d.x))
+      .attr('cy', (d) => currentTransform.applyY(d.y))
+      .attr('r', radius);
+  
+    d3.selectAll('text')
+      .attr('x', (d) => currentTransform.applyX(d.x))
+      .attr('y', (d) => currentTransform.applyY(d.y) + 10)
+      .style('font-size', `${12 * currentTransform.k}px`); 
+  }
+  
+  function initZoom() {
+    d3.select('svg')
+      .call(zoom);
+  }
+  
+  initZoom();
+
   const simulation = d3.forceSimulation(graphData.nodes)
     .force('link', d3.forceLink(graphData.links).id((d) => d.name))
     .force('charge', d3.forceManyBody())
     .force('center', d3.forceCenter(width / 2, height / 3))
     .on('tick', ticked);
 
-  // Update simulation forces when the window is resized
   window.addEventListener('resize', () => {
     const newWidth = canvas.clientWidth;
     const newHeight = canvas.clientHeight;
-    simulation.force('center', d3.forceCenter(newWidth / 2, newHeight / 3));
-    simulation.alpha(1).restart(); // Restart simulation to apply changes
+    simulation.force('center', d3.forceCenter(newWidth / 2, newHeight / 2));
+    simulation.alpha(1).restart(); 
   });
-}
-
-
-async function handleSubmit() {
-  
-  const data = {
-    from: fromLink,
-    to: toLink,
-  };
-
-  console.log(data);
-
-  fetch('/save-data', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(data),
-  })
-    .then((response) => {
-      if (!response.ok) {
-        throw new Error('Error saving data');
-      }
-      console.log('Data saved successfully!');
-      console.log(fromLink);
-      console.log(toLink);
-    })
-    .catch((error) => {
-      console.error('Error:', error);
-    });
-  graph();
 }
 
 // Convert title jadi link
@@ -133,9 +140,6 @@ function makeLink(str) {
   return link;
 }
 
-// Tambahin div loading 
-
-
 function App() {
   const [fromInputMatch, setFromInputMatch] = useState([]);
   const [toInputMatch, setToInputMatch] = useState([]);
@@ -144,6 +148,7 @@ function App() {
   const [showCardFrom, setShowCardFrom] = useState(true);
   const [fromValue, setFromValue] = useState(null);
   const [toValue, setToValue] = useState(null);
+  const [choosenMethod, setMethod] = useState(null);
 
   useEffect(() => {
     loadInputFrom();
@@ -216,8 +221,45 @@ function App() {
     console.log(toLink);
   };
 
-  return (
+  const setSelectedMethod = (e) => {
+    setMethod(e.target.value);
+  };
 
+  async function handleSubmit() {
+
+    if (!fromLink || !toLink || !choosenMethod){
+      alert("Invalid input!");
+      return;
+    }
+    
+    const data = {
+      from: fromLink,
+      to: toLink,
+      choosen_method: choosenMethod,
+    };
+  
+    console.log(data);
+  
+    fetch('/save-data', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data),
+    })
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error('Error saving data');
+        }
+        console.log('Data saved successfully!');
+        console.log(fromLink);
+        console.log(toLink);
+      })
+      .catch((error) => {
+        console.error('Error:', error);
+      });
+    graph();
+  }
+  
+  return (
     <div className="container" style={{ position: 'relative' }}>
       <div id="content-top">
         <h1>WIKIRACE</h1>
@@ -274,6 +316,12 @@ function App() {
                }
             </div>
             <br />
+            <label id="methodOption">Method</label>
+            <select id="method" onChange={(e) => setSelectedMethod(e)}>
+              <option value="bfs">BFS</option>
+              <option value="ids">IDS</option>
+            </select>
+            <br /> <br />
             <button type="button" onClick={handleSubmit}>
               Find
             </button>
@@ -281,7 +329,9 @@ function App() {
         </div>
         <div id="content-bottom-right">
           <div id="canvas-container">
-            <svg width="600px" height="400px" id="canvas"></svg>
+            <svg width="600px" height="400px" id="canvas">
+              <g></g>
+            </svg>
           </div>
         </div>
       </div>
