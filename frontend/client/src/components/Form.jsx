@@ -1,67 +1,96 @@
-import React from 'react';
-import InputComponent from './Input';
-import { useState } from 'react';
+import React from "react";
+import InputComponent from "./Input";
+import { useState } from "react";
+import MethodComponent from "./MethodOption";
+import "./Form.css";
 
 const FormComponent = () => {
-    const [fromValue, setFromValue] = useState('');
-    const [toValue, setToValue] = useState('');
+  const [selectedMethod, setSelectedMethod] = useState("bfs");
+  const [fromValue, setFromValue] = useState("");
+  const [toValue, setToValue] = useState("");
 
-    function makeLink(str) {
-        const temp = str.replace(/\s+/g, '_');
-        const link = "https://en.wikipedia.org/wiki/" + temp;
-        return link;
-      }
+  const methodOptions = [
+    { value: "bfs", text: "BFS" },
+    { value: "ids", text: "IDS" },
+  ];
 
-    async function handleSubmit() {
-        const fromLink = makeLink(fromValue);
-        const toLink = makeLink(toValue);
-      
-        const data = {
-          from: fromLink,
-          to: toLink,
-        };
-      
-        console.log(data);
-      
-        fetch('http://localhost:8080/save-data', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(data),
-        })
-        .then((response) => {
-          if (!response.ok) {
-            throw new Error('Error saving data');
-          }
-          console.log('Data saved successfully!');
-          console.log(fromLink);
-          console.log(toLink);
-        })
-        .catch((error) => {
-          console.error('Error:', error);
-        });
-      }
+  function makeLink(str) {
+    const temp = str.replace(/\s+/g, "_");
+    const link = "https://en.wikipedia.org/wiki/" + temp;
+    return link;
+  }
 
-    return (
-      <form onSubmit={(e) => { e.preventDefault(); handleSubmit(); }}>
-        <InputComponent
-          label="From"
-          id="from-field"
-          value={fromValue}
-          setValue={setFromValue}
-        />
+  async function handleSubmit() {
+    const fromLink = makeLink(fromValue);
+    const toLink = makeLink(toValue);
+
+    const data = {
+      from: fromLink,
+      to: toLink,
+    };
+
+    console.log(data);
+
+    fetch("http://localhost:8080/save-data", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(data),
+    })
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error("Error saving data");
+        }
+        console.log("Data saved successfully!");
+        console.log(fromLink);
+        console.log(toLink);
+      })
+      .catch((error) => {
+        console.error("Error:", error);
+      });
+  }
+
+  return (
+    <form
+      onSubmit={(e) => {
+        e.preventDefault();
+        handleSubmit();
+      }}
+      autocomplete="off"
+    >
+      <div className="container">
+        <div className="top">
+          <MethodComponent
+            labelId="methodOption"
+            selectId="method"
+            options={methodOptions}
+            className="method-select"
+          />
+        </div>
+        <div className="bottom">
+          <InputComponent
+            label="From"
+            id="from-field"
+            value={fromValue}
+            setValue={setFromValue}
+            autoComplete="off"
+            className="input-box"
+          />
+          <InputComponent
+            label="To"
+            id="to-field"
+            value={toValue}
+            setValue={setToValue}
+            autoComplete="off"
+            className="input-box"
+          />
+        </div>
         <br />
-        <InputComponent
-          label="To"
-          id="to-field"
-          value={toValue}
-          setValue={setToValue}
-        />
-        <br />
-        <button type="submit">
-          Find
+        <button className="find-button" type="submit">
+          Find!
         </button>
-      </form>
-    );
-  };
-  
-  export default FormComponent;
+      </div>
+    </form>
+  );
+};
+
+export default FormComponent;

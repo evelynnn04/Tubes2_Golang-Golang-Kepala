@@ -1,0 +1,26 @@
+@import url("https://fonts.googleapis.com/css2?family=Inknut+Antiqua:wght@400;700&display=swap");
+
+.method-container label {
+  display: block;
+  font-size: 24px;
+  color: #0563c1;
+  font-weight: 600;
+}
+
+.method-container select {
+  width: 100px;
+  padding: 0.5em 1em;
+  border-radius: 30px;
+  border: 1px solid #a2a2a2;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  font-size: 16px;
+  outline: none;
+  margin: 0 auto 1em;
+}
+
+.method-container {
+  font-family: "Inknut Antiqua";
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}

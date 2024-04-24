@@ -1,15 +1,11 @@
-import React from 'react';
-import { Input, Card } from 'antd';
-import { useState, useEffect } from 'react';
-import debounce from 'lodash/debounce';
-import axios from 'axios';
+import React from "react";
+import { Input, Card } from "antd";
+import { useState, useEffect } from "react";
+import debounce from "lodash/debounce";
+import axios from "axios";
+import "./Input.css";
 
-const InputComponent = ({
-  label,
-  id,
-  value,
-  setValue
-}) => {
+const InputComponent = ({ label, id, value, setValue }) => {
   const [showCard, setShowCard] = useState(true);
   const [inputMatch, setInputMatch] = useState([]);
   const [selectedCard, setSelectedCard] = useState(null);
@@ -18,7 +14,7 @@ const InputComponent = ({
     loadInput();
   }, []);
 
-  const loadInput= async () => {
+  const loadInput = async () => {
     console.log(showCard);
     try {
       const response = await axios.get(
@@ -30,7 +26,7 @@ const InputComponent = ({
     }
   };
 
-  const searchInput= debounce(async (text) => {
+  const searchInput = debounce(async (text) => {
     setValue(text);
     try {
       const response = await axios.get(
@@ -51,28 +47,32 @@ const InputComponent = ({
 
   return (
     <>
-      <label htmlFor={id}>{label}</label> <br />
-      <Input
+      <label htmlFor={id} className="input-label">
+        {label}
+      </label>
+      <input
         onChange={(e) => searchInput(e.target.value)}
         type="text"
         id={id}
         name={label}
         placeholder="Enter text here"
         value={value}
+        className="input-box"
       />
-      <div>
+      <div className="input-container">
         {showCard &&
           inputMatch &&
-          inputMatch.slice(0, 3).map((item, index) => (
-            <div key={index} style={{ width: '80%' }}>
-              {selectedCard === item ? (
-                <Card>{item.title}</Card>
-              ) : (
-                <Card id={`card${label}`} onClick={() => handleCardClick(item)}>{item.title}</Card>
-              )}
+          inputMatch.slice(0, 3).map((item, index, array) => (
+            <div
+              key={index}
+              className={`suggestion-card ${
+                index === array.length - 1 ? "last-suggestion" : ""
+              }`}
+              onClick={() => handleCardClick(item)}
+            >
+              {item.title}
             </div>
-          ))
-        }
+          ))}
       </div>
     </>
   );

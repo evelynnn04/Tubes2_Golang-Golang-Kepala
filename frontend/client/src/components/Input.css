@@ -1,0 +1,63 @@
+.input-label {
+  font-family: "Inknut Antiqua", serif;
+  color: #0563c1;
+  font-size: 1.25rem;
+  font-weight: 600;
+  display: block;
+  margin-bottom: 0.5rem;
+  text-align: left;
+}
+
+.input-box {
+  width: 100%;
+  max-width: 100%;
+  padding: 0.5rem 1rem;
+  border: 1px solid #a2a2a2;
+  border-radius: 4px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+  font-size: 1rem;
+  outline: none;
+  margin-bottom: 0;
+  position: relative;
+}
+
+.input-container {
+  width: 100%;
+  border: 1px solid #ccc;
+  border-top: none;
+  border-radius: 4px;
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
+  overflow: hidden;
+  max-width: 260px;
+  box-shadow: none;
+  position: absolute;
+  z-index: 1000;
+  background: white;
+  margin-top: -1px;
+}
+
+.suggestion-card {
+  padding: 10px;
+  border-bottom: 1px solid #ccc;
+  background-color: white;
+  font-size: 1rem;
+}
+
+.suggestion-card:hover {
+  background-color: #f0f0f0;
+}
+
+.last-suggestion {
+  border-bottom: none;
+}
+
+#input-from {
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 0;
+}
+
+#suggestions-from {
+  top: 100%;
+  width: 100%;
+}

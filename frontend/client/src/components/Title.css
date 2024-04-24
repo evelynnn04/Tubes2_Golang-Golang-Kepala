@@ -1,20 +1,24 @@
 .title-container {
-    border: 2px solid black;
-    border-radius: 10px; /* Adjust the px to get the desired roundness */
-    padding: 10px 20px;
-    display: inline-block;
-    margin: 0; /* Or any other margin you want */
-  }
-  
-  .title {
-    font-size: 36px; /* Adjust the size as needed */
-    text-align: center;
-    margin: 0;
-  }
-  
-  .subtitle {
-    font-size: 18px; /* Adjust the size as needed */
-    text-align: center;
-    margin: 10px 0 0; /* Add space above the subtitle */
-  }
-  
+  border: 2px solid black;
+  border-radius: 10px;
+  padding: 10px 20px;
+  display: inline-block;
+  width: calc(100% - 130vh);
+  margin: 0;
+}
+
+.title {
+  font-family: "Inknut Antiqua";
+  font-size: 80px;
+  text-align: center;
+  margin: 0;
+  font-weight: 200;
+  line-height: 1.5;
+}
+
+.subtitle {
+  font-family: "Inknut Antiqua";
+  font-size: 18px;
+  text-align: center;
+  margin: 10px 0 0;
+}
