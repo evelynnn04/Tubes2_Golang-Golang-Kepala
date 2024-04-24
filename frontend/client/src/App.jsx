@@ -1,14 +1,10 @@
-import { useState, useEffect } from 'react';
-import axios from 'axios';
-import { Input, Card } from 'antd';
-import debounce from 'lodash/debounce';
 import * as d3 from 'd3';
 import "./App.css"
-import InputComponent from './components/Input';
 import Title from './components/Title';
+import FormComponent from './components/Form';
 
 // Global variabel
-var fromLink, toLink, graphData;
+var graphData;
 
 // Gambar grafik multiple solution
 function graph() {
@@ -100,123 +96,9 @@ function graph() {
 }
 
 
-async function handleSubmit() {
-  
-  const data = {
-    from: fromLink,
-    to: toLink,
-  };
-
-  console.log(data);
-
-  fetch('http://localhost:8080/save-data', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(data),
-  })
-  .then((response) => {
-    if (!response.ok) {
-      throw new Error('Error saving data');
-    }
-    console.log('Data saved successfully!');
-    console.log(fromLink);
-    console.log(toLink);
-  })
-  .catch((error) => {
-    console.error('Error:', error);
-  });
-  graph();
-}
-
-// Convert title jadi link
-function makeLink(str) {
-  const temp = str.replace(/\s+/g, '_');
-  const link = "https://en.wikipedia.org/wiki/" + temp;
-  return link;
-}
-
-// Tambahin div loading 
-
 
 function App() {
-  const [fromInputMatch, setFromInputMatch] = useState([]);
-  const [toInputMatch, setToInputMatch] = useState([]);
-  const [selectedCard, setSelectedCard] = useState(null);
-  const [showCardTo, setShowCardTo] = useState(true);
-  const [showCardFrom, setShowCardFrom] = useState(true);
-  const [fromValue, setFromValue] = useState(null);
-  const [toValue, setToValue] = useState(null);
 
-  useEffect(() => {
-    loadInputFrom();
-    loadInputTo();
-  }, []);
-
-  const loadInputFrom = async () => {
-    console.log(showCardFrom);
-    try {
-      const response = await axios.get(
-        `https://en.wikipedia.org/w/api.php?action=query&format=json&formatversion=2&origin=*&list=search&srsearch=`
-      );
-      setFromInputMatch(response.data.query);
-    } catch (error) {
-      console.error(error);
-    }
-  };
-
-  const searchInputFrom = debounce(async (text) => {
-    setFromValue(text);
-    try {
-      const response = await axios.get(
-        `https://en.wikipedia.org/w/api.php?action=query&format=json&formatversion=2&origin=*&list=search&srsearch=${text}`
-      );
-      setFromInputMatch(response.data.query.search);
-      setShowCardFrom(true);
-    } catch (error) {
-      console.error(error);
-    }
-  }, 50);
-
-  const loadInputTo = async () => {
-    console.log(showCardTo);
-    try {
-      const response = await axios.get(
-        `https://en.wikipedia.org/w/api.php?action=query&format=json&formatversion=2&origin=*&list=search&srsearch=`
-      );
-      setToInputMatch(response.data.query);
-    } catch (error) {
-      console.error(error);
-    }
-  };
-
-  const searchInputTo = debounce(async (text) => {
-    setToValue(text);
-    try {
-      const response = await axios.get(
-        `https://en.wikipedia.org/w/api.php?action=query&format=json&formatversion=2&origin=*&list=search&srsearch=${text}`
-      );
-      setToInputMatch(response.data.query.search);
-      setShowCardTo(true);
-    } catch (error) {
-      console.error(error);
-    }
-  }, 50);
-
-  const handleCardClickFrom = (item) => {
-    setShowCardFrom(false);
-    setSelectedCard(item);
-    fromLink = makeLink(item.title);
-    setFromValue(item.title);
-    console.log(fromLink);
-  };
-
-  const handleCardClickTo = (item) => {
-    setShowCardTo(false);
-    setSelectedCard(item);
-    toLink = makeLink(item.title);
-    setToValue(item.title);
-    console.log(toLink);
-  };
 
   return (
 
@@ -227,33 +109,7 @@ function App() {
       
       <div id="content-bottom">
         <div id="content-bottom-left">
-          <form>
-          <InputComponent
-            label="From"
-            id="from-field"
-            inputValue={fromValue}
-            showCard={showCardFrom}
-            inputMatch={fromInputMatch}
-            handleInputChange={searchInputFrom}
-            handleCardClick={handleCardClickFrom}
-            selectedCard={selectedCard}
-          />
-            <br />
-            <InputComponent
-              label="To"
-              id="to-field"
-              inputValue={toValue}
-              showCard={showCardTo}
-              inputMatch={toInputMatch}
-              handleInputChange={searchInputTo}
-              handleCardClick={handleCardClickTo}
-              selectedCard={selectedCard}
-            />
-            <br />
-            <button type="button" onClick={handleSubmit}>
-              Find
-            </button>
-          </form>
+          <FormComponent/>
         </div>
         <div id="content-bottom-right">
           <div id="canvas-container">

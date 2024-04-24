@@ -26,25 +26,6 @@ body {
   font-family: Inknut Antiqua;
 }
 
-#content-top {
-  height: 20vh;
-  justify-content: center;
-  align-items: center;
-  display: flex;
-  flex-direction: column;
-}
-
-#content-top h1 {
-  margin: 2px;
-  color: #66FCF1;
-  font-size: 50px;
-}
-
-#content-top h2 {
-  margin: 0.5px;
-  color: #66FCF1;
-  font-size: 25px;
-}
 
 #content-bottom {
   height: 75vh;
@@ -58,7 +39,7 @@ body {
   flex: 1;
   align-items: center;
   display: flex;
-  color: #66FCF1;
+  color: #0563C1;
   margin-left: 30px;
   /* align-items: flex-end; */
   justify-content: end;
@@ -80,20 +61,6 @@ body {
   margin-right: 100px;
 }
 
-form {
-  margin-right: 0;
-  width: 90%;
-  max-width: 400px;
-  background-color: #0b0c10;
-  align-items: center;
-  justify-content: center;
-}
-
-label {
-  display: block;
-  color: #66FCF1;
-  font-size: 25px;
-}
 
 input[type="text"]{
     margin-right: 0;
@@ -108,25 +75,6 @@ input[type="text"]{
     color: #c5c6c7;  
 }
 
-
-button {
-  height: 40px;
-  margin: 0 auto;
-  cursor: pointer;
-  border-radius: 8px;
-  width: 100px;
-  margin-top: 20px;
-  background-color: #0b0c10;
-  border: 1px solid #c5c6c7; 
-  color: #66FCF1;
-  font-size: 18px;
-  font-family: Inknut Antiqua;
-}
-
-button:hover {
-  background-color: #66FCF1;
-  color: #0b0c10;
-}
 
 #canvas{
   width: 100%;

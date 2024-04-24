@@ -1,26 +1,64 @@
 import React from 'react';
 import { Input, Card } from 'antd';
+import { useState, useEffect } from 'react';
+import debounce from 'lodash/debounce';
+import axios from 'axios';
 
 const InputComponent = ({
   label,
   id,
-  inputValue,
-  showCard,
-  inputMatch,
-  handleInputChange,
-  handleCardClick,
-  selectedCard
+  value,
+  setValue
 }) => {
+  const [showCard, setShowCard] = useState(true);
+  const [inputMatch, setInputMatch] = useState([]);
+  const [selectedCard, setSelectedCard] = useState(null);
+
+  useEffect(() => {
+    loadInput();
+  }, []);
+
+  const loadInput= async () => {
+    console.log(showCard);
+    try {
+      const response = await axios.get(
+        `https://en.wikipedia.org/w/api.php?action=query&format=json&formatversion=2&origin=*&list=search&srsearch=`
+      );
+      setInputMatch(response.data.query);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const searchInput= debounce(async (text) => {
+    setValue(text);
+    try {
+      const response = await axios.get(
+        `https://en.wikipedia.org/w/api.php?action=query&format=json&formatversion=2&origin=*&list=search&srsearch=${text}`
+      );
+      setInputMatch(response.data.query.search);
+      setShowCard(true);
+    } catch (error) {
+      console.error(error);
+    }
+  }, 50);
+
+  const handleCardClick = (item) => {
+    setShowCard(false);
+    setSelectedCard(item);
+    setValue(item.title);
+  };
+
   return (
     <>
       <label htmlFor={id}>{label}</label> <br />
       <Input
-        onChange={(e) => handleInputChange(e.target.value)}
+        onChange={(e) => searchInput(e.target.value)}
         type="text"
         id={id}
         name={label}
         placeholder="Enter text here"
-        value={inputValue}
+        value={value}
       />
       <div>
         {showCard &&
