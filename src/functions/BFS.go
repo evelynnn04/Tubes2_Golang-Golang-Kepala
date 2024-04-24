@@ -1,4 +1,8 @@
-package main
+package functions
+
+import (
+	"github.com/evelynnn04/Tubes2_Golang-Golang-Kepala/src/datastructure"
+)
 
 type node struct {
 	vertex *Vertex
