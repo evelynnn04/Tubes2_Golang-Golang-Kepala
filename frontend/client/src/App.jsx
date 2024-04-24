@@ -4,6 +4,8 @@ import { Input, Card } from 'antd';
 import debounce from 'lodash/debounce';
 import * as d3 from 'd3';
 import "./App.css"
+import InputComponent from './components/Input';
+import Title from './components/Title';
 
 // Global variabel
 var fromLink, toLink, graphData;
@@ -107,22 +109,22 @@ async function handleSubmit() {
 
   console.log(data);
 
-  fetch('/save-data', {
+  fetch('http://localhost:8080/save-data', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(data),
   })
-    .then((response) => {
-      if (!response.ok) {
-        throw new Error('Error saving data');
-      }
-      console.log('Data saved successfully!');
-      console.log(fromLink);
-      console.log(toLink);
-    })
-    .catch((error) => {
-      console.error('Error:', error);
-    });
+  .then((response) => {
+    if (!response.ok) {
+      throw new Error('Error saving data');
+    }
+    console.log('Data saved successfully!');
+    console.log(fromLink);
+    console.log(toLink);
+  })
+  .catch((error) => {
+    console.error('Error:', error);
+  });
   graph();
 }
 
@@ -219,60 +221,34 @@ function App() {
   return (
 
     <div className="container" style={{ position: 'relative' }}>
-      <div id="content-top">
-        <h1>WIKIRACE</h1>
-        <h2>Presented by Golang-Golang Kepala</h2>
-      </div>
+      <Title
+      title = "WIKIRACE"
+      subtitle= "Presented By Golang Golang Kepala" />
+      
       <div id="content-bottom">
         <div id="content-bottom-left">
           <form>
-            <label htmlFor="from-field">From</label> <br />
-            <Input
-              onChange={(e) => searchInputFrom(e.target.value)}
-              type="text"
-              id="from-field"
-              name="From"
-              placeholder="Enter text here"
-              value= {fromValue}
-            />
-            <div>
-              {showCardFrom &&
-                fromInputMatch &&
-                  fromInputMatch.slice(0, 3).map((item, index) => (
-                    <div key={index} style={{width: '80%'}}>
-                      {selectedCard === item ? (
-                        <Card>{item.title}</Card>
-                      ) : (
-                        <Card id="cardFrom" onClick={() => handleCardClickFrom(item)}>{item.title}</Card>
-                      )}
-                    </div>
-                  ))
-               }
-            </div>
+          <InputComponent
+            label="From"
+            id="from-field"
+            inputValue={fromValue}
+            showCard={showCardFrom}
+            inputMatch={fromInputMatch}
+            handleInputChange={searchInputFrom}
+            handleCardClick={handleCardClickFrom}
+            selectedCard={selectedCard}
+          />
             <br />
-            <label htmlFor="to-field">To</label> <br />
-            <Input
-              onChange={(e) => searchInputTo(e.target.value)}
-              type="text"
+            <InputComponent
+              label="To"
               id="to-field"
-              name="To"
-              placeholder="Enter text here"
-              value= {toValue}
+              inputValue={toValue}
+              showCard={showCardTo}
+              inputMatch={toInputMatch}
+              handleInputChange={searchInputTo}
+              handleCardClick={handleCardClickTo}
+              selectedCard={selectedCard}
             />
-            <div>
-              {showCardTo &&
-                toInputMatch &&
-                  toInputMatch.slice(0, 3).map((item, index) => (
-                    <div key={index} style={{width: '80%'}}>
-                      {selectedCard === item ? (
-                        <Card>{item.title}</Card>
-                      ) : (
-                        <Card id="cardTo" onClick={() => handleCardClickTo(item)}>{item.title}</Card>
-                      )}
-                    </div>
-                  ))
-               }
-            </div>
             <br />
             <button type="button" onClick={handleSubmit}>
               Find
