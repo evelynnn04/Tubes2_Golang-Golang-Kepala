@@ -25,6 +25,7 @@ const FormComponent = () => {
     const toLink = makeLink(toValue);
 
     const data = {
+      method: selectedMethod,
       from: fromLink,
       to: toLink,
     };
@@ -63,6 +64,7 @@ const FormComponent = () => {
             labelId="methodOption"
             selectId="method"
             options={methodOptions}
+            onMethodChange={setSelectedMethod}
             className="method-select"
           />
         </div>

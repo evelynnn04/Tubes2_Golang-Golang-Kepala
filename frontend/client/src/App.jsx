@@ -1,10 +1,8 @@
 import * as d3 from "d3";
-import { useState } from "react";
 import "./App.css";
 import Title from "./components/Title";
 import FormComponent from "./components/Form";
-import MethodComponent from "./components/MethodOption";
-import InputComponent from "./components/Input";
+import ParticlesComponent from "./components/Particles";
 
 // Global variabel
 var graphData;
@@ -105,23 +103,23 @@ function graph() {
 }
 
 function App() {
-  const [fromValue, setFromValue] = useState("");
-
   return (
-    <div className="grid-container">
-      <div className="title">
-        <Title className="title" />
-      </div>
+    <>
+      <ParticlesComponent className="particles" />
+      <div className="grid-container">
+        <div className="title">
+          <Title className="title" />
+        </div>
 
-      <div className="form-container">
-        <FormComponent />
-      </div>
+        <div className="form-container">
+          <FormComponent />
+        </div>
 
-      <div className="canvas-container">
-        <svg width="600px" height="400px" id="canvas"></svg>
+        <div className="canvas-container">
+          <svg width="600px" height="400px" id="canvas"></svg>
+        </div>
       </div>
-    </div>
-    // <FormComponent />
+    </>
   );
 }
 

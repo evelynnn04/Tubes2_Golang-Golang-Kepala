@@ -5,8 +5,10 @@
 }
 
 .grid-container {
+  z-index: 2;
+  position: relative;
   display: grid;
-  grid-template-columns: 1fr 3fr;
+  grid-template-columns: 1fr 1fr;
   grid-template-rows: auto 1fr;
   height: 100vh;
   grid-template-areas:
@@ -38,5 +40,23 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  border: 1px;
+  background-color: #ffecbc;
+  border: 1px solid black;
+  border-radius: 15px;
+  margin-top: 100px;
+  margin-bottom: 100px;
+  margin-right: 100px;
+  box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.2);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.particles {
+  z-index: -1;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
 }
