@@ -1,6 +1,6 @@
 import React from "react";
-import InputComponent from "./Input";
 import { useState } from "react";
+import InputComponent from "./InputComponent";
 import MethodComponent from "./MethodOption";
 import "./Form.css";
 
