@@ -5,7 +5,7 @@ import (
 )
 
 type node struct {
-	vertex *Vertex
+	vertex *datastructure.Vertex
 	next   *node
 }
 
@@ -14,7 +14,7 @@ type queue struct {
 	tail *node
 }
 
-func (q *queue) enqueue(v *Vertex) {
+func (q *queue) enqueue(v *datastructure.Vertex) {
 	n := &node{vertex: v}
 	if q.tail == nil {
 		q.head = n
@@ -25,7 +25,7 @@ func (q *queue) enqueue(v *Vertex) {
 	}
 }
 
-func (q *queue) dequeue() *Vertex {
+func (q *queue) dequeue() *datastructure.Vertex {
 	n := q.head
 	if n == nil {
 		return nil
@@ -38,7 +38,7 @@ func (q *queue) dequeue() *Vertex {
 	}
 }
 
-func BFS(startVertex *Vertex, processVertex func(string)) {
+func BFS(startVertex *datastructure.Vertex, processVertex func(string)) {
 	// Graph for stroring links
 	// graph := NewDirectedGraph()
 	vertexQueue := &queue{}
