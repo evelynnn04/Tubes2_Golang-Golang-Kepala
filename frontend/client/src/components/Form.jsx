@@ -157,7 +157,7 @@ const FormComponent = () => {
     const fromLink = makeLink(fromValue);
     const toLink = makeLink(toValue);
 
-    if (!isInputValid || !fromValue || !toValue){
+    if (!isInputValid || !fromValue || !toValue || fromValue == toValue){
       alert("Input Invalid, make sure you choose the keywords from displayed card!");
       return;
     }
