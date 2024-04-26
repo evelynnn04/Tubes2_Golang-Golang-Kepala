@@ -1,8 +1,8 @@
 import React from "react";
-import {InputComponent, isInputValid} from "./Input";
+import {InputComponent, isInputValid} from "./InputComponent";
 // import InputComponent from "./Input";
 import { useState } from "react";
-import InputComponent from "./InputComponent";
+// import InputComponent from "./InputComponent";
 import MethodComponent from "./MethodOption";
 import "./Form.css";
 import * as d3 from "d3";
