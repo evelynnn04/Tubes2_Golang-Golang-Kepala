@@ -47,7 +47,7 @@ func successors(state State) []State {
 }
 
 func DLSMultiplePaths(current State, goalURL string, limit int, paths *[][]string) {
-	wg.Done()
+	defer wg.Done()
 	if current.URL == goalURL {
 		mu.Lock()
 		if !isPathInPaths(*paths, current.Path) {
@@ -61,7 +61,7 @@ func DLSMultiplePaths(current State, goalURL string, limit int, paths *[][]strin
 		return
 	}
 
-	limiter := make(chan int, 15)
+	limiter := make(chan int, 10)
 	for _, succ := range successors(current) {
 		wg.Add(1)
 		limiter <- 1

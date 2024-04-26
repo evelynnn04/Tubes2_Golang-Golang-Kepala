@@ -1,6 +1,7 @@
 package functions
 
 import (
+	"sort"
 	"strings"
 
 	"github.com/gocolly/colly"
@@ -37,5 +38,6 @@ func Scrape(startURL string) ([]string, error) {
 
 	c.Wait()
 
+	sort.Strings(links)
 	return links, scrapeError
 }

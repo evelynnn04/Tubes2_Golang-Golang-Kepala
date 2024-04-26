@@ -1,0 +1,104 @@
+{
+  "nodes": [
+    {
+      "name": "Fire"
+    },
+    {
+      "name": "Ammonia"
+    },
+    {
+      "name": "Nanometre"
+    },
+    {
+      "name": "Atom"
+    },
+    {
+      "name": "Color"
+    },
+    {
+      "name": "Light"
+    },
+    {
+      "name": "Oxygen"
+    },
+    {
+      "name": "Solar_flare"
+    },
+    {
+      "name": "Soot"
+    },
+    {
+      "name": "Supernova"
+    }
+  ],
+  "links": [
+    {
+      "source": "https://en.wikipedia.org/wiki/Fire",
+      "target": "https://en.wikipedia.org/wiki/Ammonia"
+    },
+    {
+      "source": "https://en.wikipedia.org/wiki/Ammonia",
+      "target": "https://en.wikipedia.org/wiki/Nanometre"
+    },
+    {
+      "source": "https://en.wikipedia.org/wiki/Fire",
+      "target": "https://en.wikipedia.org/wiki/Atom"
+    },
+    {
+      "source": "https://en.wikipedia.org/wiki/Atom",
+      "target": "https://en.wikipedia.org/wiki/Nanometre"
+    },
+    {
+      "source": "https://en.wikipedia.org/wiki/Fire",
+      "target": "https://en.wikipedia.org/wiki/Color"
+    },
+    {
+      "source": "https://en.wikipedia.org/wiki/Color",
+      "target": "https://en.wikipedia.org/wiki/Nanometre"
+    },
+    {
+      "source": "https://en.wikipedia.org/wiki/Fire",
+      "target": "https://en.wikipedia.org/wiki/Light"
+    },
+    {
+      "source": "https://en.wikipedia.org/wiki/Light",
+      "target": "https://en.wikipedia.org/wiki/Nanometre"
+    },
+    {
+      "source": "https://en.wikipedia.org/wiki/Fire",
+      "target": "https://en.wikipedia.org/wiki/Oxygen"
+    },
+    {
+      "source": "https://en.wikipedia.org/wiki/Oxygen",
+      "target": "https://en.wikipedia.org/wiki/Nanometre"
+    },
+    {
+      "source": "https://en.wikipedia.org/wiki/Fire",
+      "target": "https://en.wikipedia.org/wiki/Solar_flare"
+    },
+    {
+      "source": "https://en.wikipedia.org/wiki/Solar_flare",
+      "target": "https://en.wikipedia.org/wiki/Nanometre"
+    },
+    {
+      "source": "https://en.wikipedia.org/wiki/Fire",
+      "target": "https://en.wikipedia.org/wiki/Soot"
+    },
+    {
+      "source": "https://en.wikipedia.org/wiki/Soot",
+      "target": "https://en.wikipedia.org/wiki/Nanometre"
+    },
+    {
+      "source": "https://en.wikipedia.org/wiki/Fire",
+      "target": "https://en.wikipedia.org/wiki/Supernova"
+    },
+    {
+      "source": "https://en.wikipedia.org/wiki/Supernova",
+      "target": "https://en.wikipedia.org/wiki/Nanometre"
+    }
+  ],
+  "details": {
+    "runtime": "11.982343042s",
+    "totalpath": "8"
+  }
+}
