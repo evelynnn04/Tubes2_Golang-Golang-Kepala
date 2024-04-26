@@ -1,14 +1,14 @@
 import React from "react";
 import {InputComponent, isInputValid} from "./InputComponent";
-// import InputComponent from "./Input";
 import { useState } from "react";
-// import InputComponent from "./InputComponent";
 import MethodComponent from "./MethodOption";
 import "./Form.css";
 import * as d3 from "d3";
+import graphJson from '../Graph.json';
+// import { Result } from "antd";
+import Result from "./Result.jsx"
+export const graphData = graphJson;
 
-// Global variabel
-var graphData;
 
 // Gambar grafik multiple solution
 function graph() {
@@ -17,25 +17,6 @@ function graph() {
   const height = canvas.clientHeight;
 
   const svg = d3.select("#canvas").html("");
-
-  // Dummy buat ngetes doang
-  graphData = {
-    nodes: [
-      { name: "1", id: "from" },
-      { name: "2" },
-      { name: "3", id: "to" },
-      { name: "4" },
-      { name: "5" },
-    ],
-    links: [
-      { source: "1", target: "2" },
-      { source: "2", target: "3" },
-      { source: "1", target: "4" },
-      { source: "4", target: "3" },
-      { source: "1", target: "5" },
-      { source: "5", target: "3" },
-    ],
-  };
 
   const radius = width / (graphData.nodes.length * 20);
 
@@ -137,10 +118,11 @@ function graph() {
   });
 }
 
-const FormComponent = () => {
+const FormComponent = ({isLoading, setLoading}) => {
   const [selectedMethod, setSelectedMethod] = useState("bfs");
   const [fromValue, setFromValue] = useState("");
   const [toValue, setToValue] = useState("");
+  const [isDone, setIsDone] = useState(false);
 
   const methodOptions = [
     { value: "bfs", text: "BFS" },
@@ -168,9 +150,6 @@ const FormComponent = () => {
       to: toLink,
     };
 
-    console.log(data);
-    graph();
-
     fetch("http://localhost:8080/save-data", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -187,6 +166,15 @@ const FormComponent = () => {
       .catch((error) => {
         console.error("Error:", error);
       });
+    
+  // Simulasi backend 5 detik
+    setLoading(true);
+    setTimeout(() => {
+      setLoading(false);
+    }, 5000);
+
+    setIsDone(true);
+    graph();
   }
 
   return (
@@ -195,7 +183,7 @@ const FormComponent = () => {
         e.preventDefault();
         handleSubmit();
       }}
-      autocomplete="off"
+      autoComplete="off"
     >
       <div className="container">
         <div className="top">
@@ -230,6 +218,7 @@ const FormComponent = () => {
           Find!
         </button>
       </div>
+      {isDone && <Result />}
     </form>
   );
 };

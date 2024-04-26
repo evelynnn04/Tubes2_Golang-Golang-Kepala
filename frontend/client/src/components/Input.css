@@ -29,12 +29,12 @@
   border-top-left-radius: 0;
   border-top-right-radius: 0;
   overflow: hidden;
-  max-width: 233px;
+  max-width: 200px;
   box-shadow: none;
   position: absolute;
-  z-index: 1000;
+  z-index: 1;
   background: white;
-  margin-top: -1px;
+  /* margin-top: -1px; */
 }
 
 .suggestion-card {

@@ -1,7 +1,8 @@
 .container {
   display: flex;
   flex-direction: column;
-  align-items: center;
+  align-items: flex-start;
+  /* justify-content: center; */
 }
 
 .top {
@@ -34,6 +35,7 @@
   cursor: pointer;
   border-radius: 12px;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
+  align-self: flex-start;
 }
 
 .find-button:hover {

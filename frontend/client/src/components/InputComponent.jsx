@@ -1,5 +1,5 @@
-import React from "react";
-import { Input, Card } from "antd";
+// import React from "react";
+// import { Input, Card } from "antd";
 import { useState, useEffect } from "react";
 import debounce from "lodash/debounce";
 import axios from "axios";
@@ -11,16 +11,12 @@ const InputComponent = ({ label, id, value, setValue }) => {
   const [showCard, setShowCard] = useState(true);
   const [inputMatch, setInputMatch] = useState([]);
   const [selectedCard, setSelectedCard] = useState(null);
-  // const [fromInputValid, setFromInputValid] = useState(false);
-  // const [toInputValid, setToInputValid] = useState(false);
-  // export const [inputValid, setInputValid] = useState(false);
 
   useEffect(() => {
     loadInput();
   }, []);
 
   const loadInput = async () => {
-    console.log(showCard);
     try {
       const response = await axios.get(
         `https://en.wikipedia.org/w/api.php?action=query&format=json&formatversion=2&origin=*&list=search&srsearch=`
@@ -34,7 +30,6 @@ const InputComponent = ({ label, id, value, setValue }) => {
   const searchInput = debounce(async (text) => {
     setValue(text);
     isInputValid = false;
-    console.log(isInputValid);
     try {
       const response = await axios.get(
         `https://en.wikipedia.org/w/api.php?action=query&format=json&formatversion=2&origin=*&list=search&srsearch=${text}`
@@ -51,7 +46,6 @@ const InputComponent = ({ label, id, value, setValue }) => {
     setSelectedCard(item);
     setValue(item.title);
     isInputValid = true;
-    console.log(isInputValid);
   };
 
   return (
@@ -88,4 +82,3 @@ const InputComponent = ({ label, id, value, setValue }) => {
 };
 
 export {InputComponent, isInputValid};
-// export default InputComponent;
