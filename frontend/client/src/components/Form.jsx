@@ -1,23 +1,20 @@
 import React from "react";
-import { InputComponent, isInputValid } from "./InputComponent";
+import {InputComponent, isInputValid} from "./InputComponent";
 import { useState, useEffect } from "react";
 import MethodComponent from "./MethodOption";
 import "./Form.css";
 import * as d3 from "d3";
-import graphJson from "../Graph.json";
-// import { Result } from "antd";
-import Result from "./Result.jsx";
-export const graphData = graphJson;
+// import graphJson from '../Graph.json';
+import Result from "./Result.jsx"
 
 // Gambar grafik multiple solution
-function graph() {
+function graph(graphData) {
   const canvas = document.getElementById("canvas");
   const width = canvas.clientWidth;
   const height = canvas.clientHeight;
 
   const svg = d3.select("#canvas").html("");
-
-  const radius = width / (graphData.nodes.length * 20);
+  // const radius = width / (graphData.nodes.length * 20);
 
   // Gambar line
   const link = svg
@@ -39,7 +36,7 @@ function graph() {
     .attr("fill", (d) =>
       d.id === "from" || d.id === "to" ? "#000000" : "#c5c6c7"
     )
-    .attr("r", radius);
+    // .attr("r", radius);
 
   // Gambar text
   const nodeNameText = svg
@@ -54,37 +51,39 @@ function graph() {
     .style("font-size", "12px")
     .style("fill", (d) =>
       d.id === "from" || d.id === "to" ? "#000000" : "#c5c6c7"
-    );
+    )
 
-  let zoom = d3.zoom().on("zoom", handleZoom);
+  let zoom = d3.zoom()
+  .on('zoom', handleZoom);
 
   function handleZoom(e) {
     const currentTransform = e.transform;
     const radius = 5 * currentTransform.k;
-
-    d3.selectAll("line")
-      .attr("x1", (d) => currentTransform.applyX(d.source.x))
-      .attr("y1", (d) => currentTransform.applyY(d.source.y))
-      .attr("x2", (d) => currentTransform.applyX(d.target.x))
-      .attr("y2", (d) => currentTransform.applyY(d.target.y));
-
-    d3.selectAll("circle")
-      .attr("cx", (d) => currentTransform.applyX(d.x))
-      .attr("cy", (d) => currentTransform.applyY(d.y))
-      .attr("r", radius);
-
-    d3.selectAll("text")
-      .attr("x", (d) => currentTransform.applyX(d.x))
-      .attr("y", (d) => currentTransform.applyY(d.y) + 10)
-      .style("font-size", `${12 * currentTransform.k}px`);
+  
+    d3.selectAll('line')
+      .attr('x1', (d) => currentTransform.applyX(d.source.x))
+      .attr('y1', (d) => currentTransform.applyY(d.source.y))
+      .attr('x2', (d) => currentTransform.applyX(d.target.x))
+      .attr('y2', (d) => currentTransform.applyY(d.target.y));
+  
+    d3.selectAll('circle')
+      .attr('cx', (d) => currentTransform.applyX(d.x))
+      .attr('cy', (d) => currentTransform.applyY(d.y))
+      .attr('r', radius);
+  
+    d3.selectAll('text')
+      .attr('x', (d) => currentTransform.applyX(d.x))
+      .attr('y', (d) => currentTransform.applyY(d.y) + 10)
+      .style('font-size', `${12 * currentTransform.k}px`); 
   }
-
+    
   function initZoom() {
-    d3.select("svg").call(zoom);
+    d3.select('svg')
+      .call(zoom);
   }
 
   initZoom();
-
+  
   function ticked() {
     link
       .attr("x1", (d) => d.source.x)
@@ -111,7 +110,7 @@ function graph() {
     const newWidth = canvas.clientWidth;
     const newHeight = canvas.clientHeight;
     simulation.force("center", d3.forceCenter(newWidth / 2, newHeight / 3));
-    simulation.alpha(1).restart();
+    simulation.alpha(1).restart(); 
   });
 }
 
@@ -121,41 +120,34 @@ const FormComponent = ({ isLoading, setLoading }) => {
   const [toValue, setToValue] = useState("");
   const [isDone, setIsDone] = useState(false);
   const [buttonEnabled, setButtonEnabled] = useState(true);
-
-  // useEffect(() => {
-  //   if (buttonEnabled) {
-  //     setButtonEnabled(true);
-  //     console.log("enabled")
-  //   } else {
-  //     setButtonEnabled(false);
-  //     console.log("disabled")
-  //   }
-  // }, [fromValue, toValue, selectedMethod]);
+  const [graphData, setGraphData] = useState(null);
 
   const methodOptions = [
     { value: "bfs", text: "BFS" },
     { value: "ids", text: "IDS" },
   ];
 
-  function makeLink(str) {
-    const temp = str.replace(/\s+/g, "_");
-    const link = "https://en.wikipedia.org/wiki/" + temp;
-    return link;
-  }
+  // Function to fetch graph data
+  useEffect(() => {
+    async function fetchData() {
+      const response = await fetch('../Graph.json');
+      const data = await response.json();
+      setGraphData(data);
+    }
+    fetchData();
+  }, []);
 
+  // Function to handle form submission
   async function handleSubmit() {
     const fromLink = makeLink(fromValue);
     const toLink = makeLink(toValue);
-    setButtonEnabled(false);
-    console.log("button enabled: " + buttonEnabled);
 
-    if (!isInputValid || !fromValue || !toValue || fromValue == toValue) {
-      alert(
-        "Input Invalid, make sure you choose the keywords from displayed card!"
-      );
+    if (!isInputValid || !fromValue || !toValue || fromValue === toValue) {
+      alert("Input Invalid, make sure you choose the keywords from displayed card!");
       return;
     }
 
+    setLoading(true);
     const data = {
       method: selectedMethod,
       from: fromLink,
@@ -183,7 +175,8 @@ const FormComponent = ({ isLoading, setLoading }) => {
         }
 
         if (data.message === "Data processed successfully!") {
-          graph();
+          // Call the graph function after fetching the data
+          graph(graphData);
         }
       })
       .catch((error) => {
@@ -193,6 +186,15 @@ const FormComponent = ({ isLoading, setLoading }) => {
         setLoading(false);
         setButtonEnabled(true);
       });
+
+    setIsDone(true);
+  }
+
+  // Function to generate link
+  function makeLink(str) {
+    const temp = str.replace(/\s+/g, "_");
+    const link = "https://en.wikipedia.org/wiki/" + temp;
+    return link;
   }
 
   return (
@@ -242,3 +244,6 @@ const FormComponent = ({ isLoading, setLoading }) => {
 };
 
 export default FormComponent;
+
+
+
