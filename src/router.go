@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	// "go/printer"
 	"net/http"
 	"time"
 
@@ -36,46 +37,41 @@ func main() {
 
 		if data.Method == "ids" {
 			start := time.Now()
-			paths, found := functions.IDSMultiplePaths(data.From, data.To, 6)
+			paths, found, totalArticle := functions.IDSMultiplePaths(data.From, data.To, 6)
 			end := time.Now()
 			runtime := end.Sub(start)
 
 			if found {
-				graphJSON, err := functions.DataIntoJson(paths, runtime, fmt.Sprint(len(paths)))
+				graphJSON, err := functions.DataIntoJson(paths, runtime, fmt.Sprint(len(paths)), fmt.Sprint(len(paths[0])), totalArticle)
 				if err != nil {
 					c.JSON(http.StatusInternalServerError, gin.H{"message": "Error generating data", "error": err.Error()})
 					return
 				}
 
-				// Success, send JSON data directly
 				c.Header("Content-Type", "application/json")
 				c.String(http.StatusOK, graphJSON)
 			} else {
-				// If no paths found
 				c.JSON(http.StatusNotFound, gin.H{
 					"message": "No paths found between the specified nodes",
 					"runtime": runtime.String(),
 				})
 			}
-		} else {
+		} else if data.Method == "bfs" {
 			start := time.Now()
-			paths, found := functions.BFS(data.From, data.To)
+			paths, found, totalArticle := functions.BFS(data.From, data.To)
 			end := time.Now()
 			runtime := end.Sub(start)
 
 			if found {
-				err := functions.DataIntoJson(paths, "../frontend/client/src/Graph.json", runtime, fmt.Sprint(len(paths)))
+				graphJSON, err := functions.DataIntoJson(paths, runtime, fmt.Sprint(len(paths)), fmt.Sprint(len(paths[0])), totalArticle)
 				if err != nil {
 					c.JSON(http.StatusInternalServerError, gin.H{"message": "Error saving data", "error": err.Error()})
 					return
 				}
 
 				//Kalo sukses kirim ini
-				c.JSON(http.StatusOK, gin.H{
-					"message":    "Data processed successfully!",
-					"runtime":    runtime.String(),
-					"pathsFound": len(paths),
-				})
+				c.Header("Content-Type", "application/json")
+				c.String(http.StatusOK, graphJSON)
 			} else {
 				// Kalo gagal
 				c.JSON(http.StatusNotFound, gin.H{
@@ -88,11 +84,13 @@ func main() {
 
 	router.Run()
 
-	// startURL := "https://en.wikipedia.org/wiki/Fire"
-	// goalURL := "https://en.wikipedia.org/wiki/Nanometre"
+	// startURL := "https://en.wikipedia.org/wiki/Chair"
+	// goalURL := "https://en.wikipedia.org/wiki/Phoenicia"
 	// start := time.Now()
-	// if path, found := functions.IDSMultiplePaths(startURL, goalURL, 10); found {
-	// 	functions.DataIntoJson(path, "../frontend/client/src/Graph.json")
+	// path, found := functions.BFS(startURL, goalURL)
+	// if found {
+	// 	fmt.Print("Solusi: ", path)
+	// 	fmt.Print("Runtime: ")
 	// } else {
 	// 	fmt.Println("Ga ada solusi :(.")
 	// }

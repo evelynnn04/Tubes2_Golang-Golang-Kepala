@@ -55,3 +55,21 @@
   color: #666; 
   cursor: not-allowed;
 }
+
+.runtime-result-container {
+  display: flex;
+  flex-direction: column; 
+  align-items: flex-start;
+  font-family: 'Arial', sans-serif;
+  color: #805CB4;
+  gap: 0.5rem;
+}
+
+.runtime-result-text {
+  margin: 0;
+  font-size: 18px;
+}
+
+.runtime-result-bold {
+  font-weight: bold;
+}

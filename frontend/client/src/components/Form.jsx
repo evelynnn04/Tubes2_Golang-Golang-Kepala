@@ -5,7 +5,6 @@ import MethodComponent from "./MethodOption";
 import "./Form.css";
 import * as d3 from "d3";
 
-
 // Gambar grafik multiple solution
 function graph(graphData) {
   const canvas = document.getElementById("canvas");
@@ -119,7 +118,7 @@ const fetchData = async () => {
     }
     const data = await response.json();
     setGraphData(data);
-    graph(data); 
+    graph(data);
   } catch (error) {
     console.error("Failed to fetch graph data:", error);
   }
@@ -134,6 +133,8 @@ const FormComponent = ({ isLoading, setLoading }) => {
   const [graphData, setGraphData] = useState(null);
   var [runtime, setRuntime] = useState(null);
   var [result, setResult] = useState(null);
+  var [totDepth, setDepth] = useState(null);
+  var [totArticle, setTotArticle] = useState(null);
 
   const methodOptions = [
     { value: "bfs", text: "BFS" },
@@ -172,9 +173,11 @@ const FormComponent = ({ isLoading, setLoading }) => {
       .then((response) => response.json())
       .then((data) => {
         if (data) {
-          setGraphData(data); 
+          setGraphData(data);
           setRuntime(data.details[0].runtime);
-          setResult(data.details[1].totalpath)
+          setResult(data.details[1].totalpath);
+          setDepth(data.details[2].depth);
+          setTotArticle(data.details[3].totArticle);
         }
       })
       .catch((error) => {
@@ -234,9 +237,24 @@ const FormComponent = ({ isLoading, setLoading }) => {
           Find!
         </button>
       </div>
-      {isDone && 
-        <p>Runtime : {runtime} Result: {result}</p>
-      }
+      {isDone && (
+        <div className="runtime-result-container">
+          <p className="runtime-result-text">
+            Time: <span className="runtime-result-bold">{runtime}</span>
+          </p>
+          <p className="runtime-result-text">
+            Total Path: <span className="runtime-result-bold">{result}</span>
+          </p>
+          <p className="runtime-result-text">
+            Total Degree:{" "}
+            <span className="runtime-result-bold">{totDepth}</span>
+          </p>
+          <p className="runtime-result-text">
+            Total Article:{" "}
+            <span className="runtime-result-bold">{totArticle}</span>
+          </p>
+        </div>
+      )}
     </form>
   );
 };
