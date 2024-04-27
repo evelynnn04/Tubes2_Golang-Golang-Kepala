@@ -28,7 +28,7 @@ func successors(state State) []State {
 	return states
 }
 
-func DLSMultiplePaths(current State, goalURL string, limit int, paths *[][]string, isVisited map[string]bool) {
+func DLSMultiplePaths(current State, goalURL string, limit int, paths *[][]string, isVisited map[string]bool, totalArticle *int) {
 	defer wg.Done()
 	if current.URL == goalURL {
 		mu.Lock()
@@ -43,6 +43,7 @@ func DLSMultiplePaths(current State, goalURL string, limit int, paths *[][]strin
 
 	mu.Lock()
 	isVisited[current.URL] = true
+	*totalArticle++
 	mu.Unlock()
 
 	limiter := make(chan int, 15)
@@ -50,7 +51,7 @@ func DLSMultiplePaths(current State, goalURL string, limit int, paths *[][]strin
 		wg.Add(1)
 		limiter <- 1
 		go func(succ State) {
-			DLSMultiplePaths(succ, goalURL, limit-1, paths, isVisited)
+			DLSMultiplePaths(succ, goalURL, limit-1, paths, isVisited, totalArticle)
 			<-limiter
 		}(succ)
 
@@ -61,18 +62,19 @@ func DLSMultiplePaths(current State, goalURL string, limit int, paths *[][]strin
 	mu.Unlock()
 }
 
-func IDSMultiplePaths(startURL, goalURL string, maxDepth int) ([][]string, bool) {
+func IDSMultiplePaths(startURL, goalURL string, maxDepth int) ([][]string, bool, int) {
 	var paths [][]string
+	totalArticle := 0
 	startState := State{URL: startURL, Path: []string{startURL}}
 	isVisited := make(map[string]bool)
 
 	for depth := 0; depth <= maxDepth; depth++ {
 		wg.Add(1)
-		DLSMultiplePaths(startState, goalURL, depth, &paths, isVisited)
+		DLSMultiplePaths(startState, goalURL, depth, &paths, isVisited, &totalArticle)
 		wg.Wait()
 		if len(paths) > 0 {
 			break
 		}
 	}
-	return paths, len(paths) > 0
+	return paths, len(paths) > 0, totalArticle
 }

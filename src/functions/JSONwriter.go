@@ -3,7 +3,9 @@ package functions
 import (
 	"encoding/json"
 	"fmt"
+
 	"net/url"
+	"strconv"
 	"strings"
 	"time"
 )
@@ -26,13 +28,16 @@ type Graph struct {
 	Details []DetailsEntry `json:"details"`
 }
 
-func DataIntoJson(paths [][]string, runtime time.Duration, totalpath string) (string, error) {
+func DataIntoJson(paths [][]string, runtime time.Duration, totalpath string, totalDepth string, totalArticle int) (string, error) {
 
 	runtimeString := runtime.String()
+	strTotArtic := strconv.Itoa(totalArticle)
 
 	details := []DetailsEntry{
 		{"runtime": runtimeString},
 		{"totalpath": totalpath},
+		{"depth": totalDepth},
+		{"totArticle": strTotArtic},
 	}
 
 	graph := Graph{

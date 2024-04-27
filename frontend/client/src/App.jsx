@@ -21,7 +21,7 @@ function App() {
         </div>
 
         <div className="canvas-container">
-          <svg width="400px" height="400px" id="canvas"></svg>
+          <svg width="800px" height="400px" id="canvas"></svg>
           {isLoading && (
             <div className="loading-overlay">
               <img src={kuru2} alt="Loading GIF" />
