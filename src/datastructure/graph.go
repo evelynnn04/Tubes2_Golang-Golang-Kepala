@@ -31,8 +31,10 @@ func (g *Graph) AddEdge(k1, k2 string) {
 	v1 := g.Vertices[k1]
 	v2 := g.Vertices[k2]
 
-	if v1 == nil || v2 == nil {
-		panic("simpul tidak ada!")
+	if v1 == nil {
+		panic("parent vertex bernilai nil!")
+	} else if v2 == nil {
+		panic("child vertex bernilai nil!")
 	}
 
 	if _, ok := v1.Vertices[v2.Key]; ok {
