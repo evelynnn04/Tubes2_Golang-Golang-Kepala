@@ -1,43 +1,69 @@
 package functions
 
 import (
+	"fmt"
+	"net/http"
+	"net/url"
 	"sort"
 	"strings"
 
-	"github.com/gocolly/colly"
+	"github.com/PuerkitoBio/goquery"
 )
 
 func Scrape(startURL string) ([]string, error) {
-	c := colly.NewCollector(
-		colly.AllowedDomains("wikipedia.org", "en.wikipedia.org"),
-		// colly.CacheDir("./scrapeCache"),
-	)
+	client := &http.Client{}
 
-	c.UserAgent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.36"
+	resp, err := client.Get(startURL)
+	if err != nil {
+		return nil, fmt.Errorf("error fetching the page: %w", err)
+	}
+	defer resp.Body.Close()
+
+	if resp.StatusCode != 200 {
+		return nil, fmt.Errorf("error: non-200 HTTP status code: %d", resp.StatusCode)
+	}
+
+	doc, err := goquery.NewDocumentFromReader(resp.Body)
+	if err != nil {
+		return nil, fmt.Errorf("error parsing HTML: %w", err)
+	}
 
 	uniqueLinks := make(map[string]bool)
 	var links []string
-	var scrapeError error
 
-	c.OnHTML("a[href]", func(e *colly.HTMLElement) {
-		link := e.Attr("href")
-		if e.Request.AbsoluteURL(link) != "" && strings.HasPrefix(link, "/wiki/") && !strings.Contains(link, ":") {
-			fullLink := e.Request.AbsoluteURL(link)
-			if _, exists := uniqueLinks[fullLink]; !exists {
-				uniqueLinks[fullLink] = true
-				links = append(links, fullLink)
+	doc.Find("a[href]").Each(func(i int, s *goquery.Selection) {
+		link, _ := s.Attr("href")
+
+		if strings.HasPrefix(link, "/wiki/") && !strings.Contains(link, ":") {
+			if hashIndex := strings.Index(link, "#"); hashIndex != -1 {
+				link = link[:hashIndex]
+			}
+
+			absLink, err := resolveRelativeURL(startURL, link)
+			if err != nil {
+				fmt.Printf("Invalid URL %s: %v\n", link, err)
+				return
+			}
+
+			if _, exists := uniqueLinks[absLink]; !exists {
+				uniqueLinks[absLink] = true
+				links = append(links, absLink)
 			}
 		}
 	})
 
-	c.OnError(func(r *colly.Response, err error) {
-		scrapeError = err
-	})
-
-	c.Visit(startURL)
-
-	c.Wait()
-
 	sort.Strings(links)
-	return links, scrapeError
+	return links, nil
+}
+
+func resolveRelativeURL(baseURL, relURL string) (string, error) {
+	base, err := url.Parse(baseURL)
+	if err != nil {
+		return "", err
+	}
+	rel, err := url.Parse(relURL)
+	if err != nil {
+		return "", err
+	}
+	return base.ResolveReference(rel).String(), nil
 }
