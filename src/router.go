@@ -41,20 +41,17 @@ func main() {
 			runtime := end.Sub(start)
 
 			if found {
-				err := functions.DataIntoJson(paths, "../frontend/client/src/Graph.json", runtime, fmt.Sprint(len(paths)))
+				graphJSON, err := functions.DataIntoJson(paths, runtime, fmt.Sprint(len(paths)))
 				if err != nil {
-					c.JSON(http.StatusInternalServerError, gin.H{"message": "Error saving data", "error": err.Error()})
+					c.JSON(http.StatusInternalServerError, gin.H{"message": "Error generating data", "error": err.Error()})
 					return
 				}
 
-				//Kalo sukses kirim ini
-				c.JSON(http.StatusOK, gin.H{
-					"message":    "Data processed successfully!",
-					"runtime":    runtime.String(),
-					"pathsFound": len(paths),
-				})
+				// Success, send JSON data directly
+				c.Header("Content-Type", "application/json")
+				c.String(http.StatusOK, graphJSON)
 			} else {
-				// Kalo gagal
+				// If no paths found
 				c.JSON(http.StatusNotFound, gin.H{
 					"message": "No paths found between the specified nodes",
 					"runtime": runtime.String(),

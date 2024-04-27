@@ -10,11 +10,7 @@ function App() {
   return (
     <div className="app-container">
       <ParticlesComponent className="particles" />
-      {isLoading && (
-        <div className="loading-overlay">
-          <img src={kuru2} alt="Loading GIF" />
-        </div>
-      )}
+
       <div className="grid-container">
         <div className="title">
           <Title className="title" />
@@ -26,6 +22,11 @@ function App() {
 
         <div className="canvas-container">
           <svg width="400px" height="400px" id="canvas"></svg>
+          {isLoading && (
+            <div className="loading-overlay">
+              <img src={kuru2} alt="Loading GIF" />
+            </div>
+          )}
         </div>
       </div>
     </div>

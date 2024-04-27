@@ -4,7 +4,6 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/url"
-	"os"
 	"strings"
 	"time"
 )
@@ -27,7 +26,7 @@ type Graph struct {
 	Details []DetailsEntry `json:"details"`
 }
 
-func DataIntoJson(paths [][]string, filename string, runtime time.Duration, totalpath string) error {
+func DataIntoJson(paths [][]string, runtime time.Duration, totalpath string) (string, error) {
 
 	runtimeString := runtime.String()
 
@@ -47,11 +46,11 @@ func DataIntoJson(paths [][]string, filename string, runtime time.Duration, tota
 	if len(paths) > 0 {
 		fromURL, err := url.Parse(paths[0][0])
 		if err != nil {
-			return fmt.Errorf("error parsing from URL: %w", err)
+			return "error", fmt.Errorf("error parsing from URL: %w", err)
 		}
 		toURL, err := url.Parse(paths[0][len(paths[0])-1])
 		if err != nil {
-			return fmt.Errorf("error parsing to URL: %w", err)
+			return "error", fmt.Errorf("error parsing to URL: %w", err)
 		}
 		fromTitle = strings.TrimPrefix(fromURL.Path, "/wiki/")
 		toTitle = strings.TrimPrefix(toURL.Path, "/wiki/")
@@ -61,11 +60,11 @@ func DataIntoJson(paths [][]string, filename string, runtime time.Duration, tota
 		for i := 0; i < len(path)-1; i++ {
 			sourceURL, err := url.Parse(path[i])
 			if err != nil {
-				return fmt.Errorf("error parsing URL: %w", err)
+				return "error", fmt.Errorf("error parsing URL: %w", err)
 			}
 			targetURL, err := url.Parse(path[i+1])
 			if err != nil {
-				return fmt.Errorf("error parsing URL: %w", err)
+				return "error", fmt.Errorf("error parsing URL: %w", err)
 			}
 
 			sourceTitle := strings.TrimPrefix(sourceURL.Path, "/wiki/")
@@ -93,17 +92,10 @@ func DataIntoJson(paths [][]string, filename string, runtime time.Duration, tota
 		parts := strings.Split(linkKey, "->")
 		graph.Links = append(graph.Links, Link{Source: parts[0], Target: parts[1]})
 	}
-
 	graphJSON, err := json.MarshalIndent(graph, "", "  ")
 	if err != nil {
-		return fmt.Errorf("error creating JSON: %w", err)
+		return "", fmt.Errorf("error creating JSON: %w", err)
 	}
 
-	err = os.WriteFile(filename, graphJSON, 0644)
-	if err != nil {
-		return fmt.Errorf("error writing JSON to file: %w", err)
-	}
-
-	fmt.Printf("JSON file '%s' created successfully!\n", filename)
-	return nil
+	return string(graphJSON), nil
 }

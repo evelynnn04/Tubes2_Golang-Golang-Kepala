@@ -4,20 +4,17 @@ import { useState, useEffect } from "react";
 import MethodComponent from "./MethodOption";
 import "./Form.css";
 import * as d3 from "d3";
-import graphJson from "../Graph.json";
-// import { Result } from "antd";
+// import graphJson from '../Graph.json';
 import Result from "./Result.jsx";
-export const graphData = graphJson;
 
 // Gambar grafik multiple solution
-function graph() {
+function graph(graphData) {
   const canvas = document.getElementById("canvas");
   const width = canvas.clientWidth;
   const height = canvas.clientHeight;
 
   const svg = d3.select("#canvas").html("");
-
-  const radius = width / (graphData.nodes.length * 20);
+  // const radius = width / (graphData.nodes.length * 20);
 
   // Gambar line
   const link = svg
@@ -38,8 +35,8 @@ function graph() {
     .append("circle")
     .attr("fill", (d) =>
       d.id === "from" || d.id === "to" ? "#000000" : "#c5c6c7"
-    )
-    .attr("r", radius);
+    );
+  // .attr("r", radius);
 
   // Gambar text
   const nodeNameText = svg
@@ -115,47 +112,54 @@ function graph() {
   });
 }
 
+const fetchData = async () => {
+  try {
+    const response = await fetch("../Graph.json");
+    if (!response.ok) {
+      throw new Error(`Failed to fetch: ${response.statusText}`);
+    }
+    const data = await response.json();
+    setGraphData(data);
+    graph(data); // Assuming you want to call graph here
+  } catch (error) {
+    console.error("Failed to fetch graph data:", error);
+  }
+};
+
 const FormComponent = ({ isLoading, setLoading }) => {
   const [selectedMethod, setSelectedMethod] = useState("bfs");
   const [fromValue, setFromValue] = useState("");
   const [toValue, setToValue] = useState("");
   const [isDone, setIsDone] = useState(false);
   const [buttonEnabled, setButtonEnabled] = useState(true);
-
-  // useEffect(() => {
-  //   if (buttonEnabled) {
-  //     setButtonEnabled(true);
-  //     console.log("enabled")
-  //   } else {
-  //     setButtonEnabled(false);
-  //     console.log("disabled")
-  //   }
-  // }, [fromValue, toValue, selectedMethod]);
+  const [graphData, setGraphData] = useState(null);
 
   const methodOptions = [
     { value: "bfs", text: "BFS" },
     { value: "ids", text: "IDS" },
   ];
 
-  function makeLink(str) {
-    const temp = str.replace(/\s+/g, "_");
-    const link = "https://en.wikipedia.org/wiki/" + temp;
-    return link;
-  }
+  // Function to fetch graph data
+  useEffect(() => {
+    if (graphData) {
+      graph(graphData); // Call graph when graphData is updated
+    }
+  }, [graphData]);
 
+  // Function to handle form submission
+  // Function to handle form submission
   async function handleSubmit() {
     const fromLink = makeLink(fromValue);
     const toLink = makeLink(toValue);
-    setButtonEnabled(false);
-    console.log("button enabled: " + buttonEnabled);
 
-    if (!isInputValid || !fromValue || !toValue || fromValue == toValue) {
+    if (!isInputValid || !fromValue || !toValue || fromValue === toValue) {
       alert(
         "Input Invalid, make sure you choose the keywords from displayed card!"
       );
       return;
     }
 
+    setLoading(true);
     const data = {
       method: selectedMethod,
       from: fromLink,
@@ -169,21 +173,9 @@ const FormComponent = ({ isLoading, setLoading }) => {
     })
       .then((response) => response.json())
       .then((data) => {
-        if (data.error) {
-          throw new Error(data.error);
-        }
-        console.log("Message from server:", data.message);
-
-        if (data.runtime) {
-          console.log("Processing time:", data.runtime);
-        }
-
-        if (data.pathsFound !== undefined) {
-          console.log("Number of paths found:", data.pathsFound);
-        }
-
-        if (data.message === "Data processed successfully!") {
-          graph();
+        if (data) {
+          // Assuming the data returned from the server is the graph data you need
+          setGraphData(data); // Set the received JSON data to graphData state
         }
       })
       .catch((error) => {
@@ -193,6 +185,13 @@ const FormComponent = ({ isLoading, setLoading }) => {
         setLoading(false);
         setButtonEnabled(true);
       });
+  }
+
+  // Function to generate link
+  function makeLink(str) {
+    const temp = str.replace(/\s+/g, "_");
+    const link = "https://en.wikipedia.org/wiki/" + temp;
+    return link;
   }
 
   return (

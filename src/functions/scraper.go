@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"net/http"
 	"net/url"
-	"sort"
 	"strings"
 
 	"github.com/PuerkitoBio/goquery"
@@ -52,7 +51,6 @@ func Scrape(startURL string) ([]string, error) {
 		}
 	})
 
-	sort.Strings(links)
 	return links, nil
 }
 
