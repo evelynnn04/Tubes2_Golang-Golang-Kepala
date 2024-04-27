@@ -38,25 +38,48 @@ func (q *queue) dequeue() *datastructure.Vertex {
 	}
 }
 
-func BFS(startVertex *datastructure.Vertex, processVertex func(string)) {
-	// Graph for stroring links
-	// graph := NewDirectedGraph()
-	vertexQueue := &queue{}
-	visitedVertices := map[string]bool{}
-	currentVertex := startVertex
+func BFS(startURL, goalURL string) (datastructure.Graph, bool) {
+	// Graph init for stroring links
+	var g = datastructure.NewDirectedGraph()
+	g.AddVertex(startURL)
+	currentVertex := g.Vertices[startURL]
 
-	for {
-		processVertex(currentVertex.Key)
+	// Queue init
+	vertexQueue := &queue{}
+
+	// visited init
+	visitedVertices := map[string]bool{}
+
+	// found status init
+	isFound := false
+	
+	// if found then stop, else keep scraping to the eternity...
+	for !isFound {
+		// scrape links from currentVertex
+		links := Scrape(currentVertex.Key)
+
+		// add links as child to currentVertex
+		for _, element := range links {
+			g.AddVertex(element)
+		}
+
+		// add currentVertex to visited
 		visitedVertices[currentVertex.Key] = true
+
+		// enqueue child if not visited
 		for _, v := range currentVertex.Vertices {
 			if !visitedVertices[v.Key] {
 				vertexQueue.enqueue(v)
 			}
 		}
+
+		// dequeue processed links
 		currentVertex = vertexQueue.dequeue()
-		// Stop if empty (temporaty condition for now...)
-		if currentVertex == nil {
-			break
+		
+		// if found change the status
+		if currentVertex.Key == goalURL {
+			isFound = true
 		}
 	}
+	return *g, isFound
 }
