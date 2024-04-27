@@ -1,51 +1,46 @@
 package functions
 
 import (
+	"fmt"
+
 	"github.com/evelynnn04/Tubes2_Golang-Golang-Kepala/src/datastructure"
 )
 
 type node struct {
 	vertex *datastructure.Vertex
-	next   *node
 }
 
-type queue struct {
-	head *node
-	tail *node
+type queue []node
+
+func (q *queue) isEmpty() bool {
+	return len(*q) == 0
 }
 
 func (q *queue) enqueue(v *datastructure.Vertex) {
 	n := &node{vertex: v}
-	if q.tail == nil {
-		q.head = n
-		q.tail = n
-	} else {
-		q.tail.next = n
-		q.tail = n
-	}
+	*q = append(*q, *n)
 }
 
 func (q *queue) dequeue() *datastructure.Vertex {
-	n := q.head
-	if n == nil {
-		return nil
+	if !q.isEmpty() {
+		processed := (*q)[0].vertex
+		*q = (*q)[1:]
+		return processed
 	} else {
-		q.head = q.head.next
-		if q.head == nil {
-			q.tail = nil
-		}
-		return n.vertex
+		return nil
 	}
 }
 
 func BFS(startURL, goalURL string) (datastructure.Graph, bool) {
 	// Graph init for stroring links
-	var g = datastructure.NewDirectedGraph()
+	g := datastructure.NewDirectedGraph()
 	g.AddVertex(startURL)
+
+	// Current vertex is the startURL
 	currentVertex := g.Vertices[startURL]
 
 	// Queue init
-	vertexQueue := &queue{}
+	vertexQueue := queue{}
 
 	// visited init
 	visitedVertices := map[string]bool{}
@@ -56,25 +51,37 @@ func BFS(startURL, goalURL string) (datastructure.Graph, bool) {
 	// if found then stop, else keep scraping to the eternity...
 	for !isFound {
 		// scrape links from currentVertex
-		links := Scrape(currentVertex.Key)
-
-		// add links as child to currentVertex
-		for _, element := range links {
-			g.AddVertex(element)
-		}
+		var links []string = Scrape(currentVertex.Key)
 
 		// add currentVertex to visited
 		visitedVertices[currentVertex.Key] = true
 
+		// add links as child to currentVertex
+		for _, link := range links {
+			// create new vertex
+			g.AddVertex(link)
+
+			// assign it as child
+			g.AddEdge(currentVertex.Key, link)
+		}
+
 		// enqueue child if not visited
-		for _, v := range currentVertex.Vertices {
+		for i, v := range currentVertex.Vertices {
 			if !visitedVertices[v.Key] {
+				fmt.Println(vertexQueue)
+				fmt.Printf("QUEUE: %s\n", i)
 				vertexQueue.enqueue(v)
 			}
 		}
+		fmt.Println(vertexQueue)
 
 		// dequeue processed links
 		currentVertex = vertexQueue.dequeue()
+
+		// if the address is nil tell the program to panic
+		if currentVertex == nil {
+			panic("current vertex is nil!")
+		}
 		
 		// if found change the status
 		if currentVertex.Key == goalURL {
