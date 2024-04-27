@@ -42,7 +42,7 @@ func main() {
 			runtime := end.Sub(start)
 
 			if found {
-				graphJSON, err := functions.DataIntoJson(paths, runtime, fmt.Sprint(len(paths)), fmt.Sprint(len(paths[0])), totalArticle)
+				graphJSON, err := functions.DataIntoJson(paths, runtime, fmt.Sprint(len(paths)), fmt.Sprint(len(paths[0])-1), totalArticle)
 				if err != nil {
 					c.JSON(http.StatusInternalServerError, gin.H{"message": "Error generating data", "error": err.Error()})
 					return
@@ -63,7 +63,7 @@ func main() {
 			runtime := end.Sub(start)
 
 			if found {
-				graphJSON, err := functions.DataIntoJson(paths, runtime, fmt.Sprint(len(paths)), fmt.Sprint(len(paths[0])), totalArticle)
+				graphJSON, err := functions.DataIntoJson(paths, runtime, fmt.Sprint(len(paths)), fmt.Sprint(len(paths[0])-1), totalArticle)
 				if err != nil {
 					c.JSON(http.StatusInternalServerError, gin.H{"message": "Error saving data", "error": err.Error()})
 					return
