@@ -1,6 +1,6 @@
 import React from "react";
 import {InputComponent, isInputValid} from "./InputComponent";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import MethodComponent from "./MethodOption";
 import "./Form.css";
 import * as d3 from "d3";
@@ -123,6 +123,17 @@ const FormComponent = ({isLoading, setLoading}) => {
   const [fromValue, setFromValue] = useState("");
   const [toValue, setToValue] = useState("");
   const [isDone, setIsDone] = useState(false);
+  const [buttonEnabled, setButtonEnabled] = useState(true);
+
+  // useEffect(() => {
+  //   if (buttonEnabled) {
+  //     setButtonEnabled(true);
+  //     console.log("enabled")
+  //   } else {
+  //     setButtonEnabled(false);
+  //     console.log("disabled")
+  //   }
+  // }, [fromValue, toValue, selectedMethod]);
 
   const methodOptions = [
     { value: "bfs", text: "BFS" },
@@ -138,6 +149,8 @@ const FormComponent = ({isLoading, setLoading}) => {
   async function handleSubmit() {
     const fromLink = makeLink(fromValue);
     const toLink = makeLink(toValue);
+    setButtonEnabled(false);
+    console.log("button enabled: " + buttonEnabled);
 
     if (!isInputValid || !fromValue || !toValue || fromValue == toValue){
       alert("Input Invalid, make sure you choose the keywords from displayed card!");
@@ -171,6 +184,7 @@ const FormComponent = ({isLoading, setLoading}) => {
     setLoading(true);
     setTimeout(() => {
       setLoading(false);
+      setButtonEnabled(true);
     }, 5000);
 
     setIsDone(true);
@@ -214,7 +228,7 @@ const FormComponent = ({isLoading, setLoading}) => {
           />
         </div>
         <br />
-        <button className="find-button" type="submit">
+        <button className="find-button" type="submit" disabled={!buttonEnabled}>
           Find!
         </button>
       </div>
