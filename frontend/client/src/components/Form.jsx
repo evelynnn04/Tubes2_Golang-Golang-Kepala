@@ -1,14 +1,13 @@
 import React from "react";
-import {InputComponent, isInputValid} from "./InputComponent";
+import { InputComponent, isInputValid } from "./InputComponent";
 import { useState, useEffect } from "react";
 import MethodComponent from "./MethodOption";
 import "./Form.css";
 import * as d3 from "d3";
-import graphJson from '../Graph.json';
+import graphJson from "../Graph.json";
 // import { Result } from "antd";
-import Result from "./Result.jsx"
+import Result from "./Result.jsx";
 export const graphData = graphJson;
-
 
 // Gambar grafik multiple solution
 function graph() {
@@ -55,39 +54,37 @@ function graph() {
     .style("font-size", "12px")
     .style("fill", (d) =>
       d.id === "from" || d.id === "to" ? "#000000" : "#c5c6c7"
-    )
+    );
 
-  let zoom = d3.zoom()
-  .on('zoom', handleZoom);
+  let zoom = d3.zoom().on("zoom", handleZoom);
 
   function handleZoom(e) {
     const currentTransform = e.transform;
     const radius = 5 * currentTransform.k;
-  
-    d3.selectAll('line')
-      .attr('x1', (d) => currentTransform.applyX(d.source.x))
-      .attr('y1', (d) => currentTransform.applyY(d.source.y))
-      .attr('x2', (d) => currentTransform.applyX(d.target.x))
-      .attr('y2', (d) => currentTransform.applyY(d.target.y));
-  
-    d3.selectAll('circle')
-      .attr('cx', (d) => currentTransform.applyX(d.x))
-      .attr('cy', (d) => currentTransform.applyY(d.y))
-      .attr('r', radius);
-  
-    d3.selectAll('text')
-      .attr('x', (d) => currentTransform.applyX(d.x))
-      .attr('y', (d) => currentTransform.applyY(d.y) + 10)
-      .style('font-size', `${12 * currentTransform.k}px`); 
+
+    d3.selectAll("line")
+      .attr("x1", (d) => currentTransform.applyX(d.source.x))
+      .attr("y1", (d) => currentTransform.applyY(d.source.y))
+      .attr("x2", (d) => currentTransform.applyX(d.target.x))
+      .attr("y2", (d) => currentTransform.applyY(d.target.y));
+
+    d3.selectAll("circle")
+      .attr("cx", (d) => currentTransform.applyX(d.x))
+      .attr("cy", (d) => currentTransform.applyY(d.y))
+      .attr("r", radius);
+
+    d3.selectAll("text")
+      .attr("x", (d) => currentTransform.applyX(d.x))
+      .attr("y", (d) => currentTransform.applyY(d.y) + 10)
+      .style("font-size", `${12 * currentTransform.k}px`);
   }
-    
+
   function initZoom() {
-    d3.select('svg')
-      .call(zoom);
+    d3.select("svg").call(zoom);
   }
 
   initZoom();
-  
+
   function ticked() {
     link
       .attr("x1", (d) => d.source.x)
@@ -114,11 +111,11 @@ function graph() {
     const newWidth = canvas.clientWidth;
     const newHeight = canvas.clientHeight;
     simulation.force("center", d3.forceCenter(newWidth / 2, newHeight / 3));
-    simulation.alpha(1).restart(); 
+    simulation.alpha(1).restart();
   });
 }
 
-const FormComponent = ({isLoading, setLoading}) => {
+const FormComponent = ({ isLoading, setLoading }) => {
   const [selectedMethod, setSelectedMethod] = useState("bfs");
   const [fromValue, setFromValue] = useState("");
   const [toValue, setToValue] = useState("");
@@ -152,8 +149,10 @@ const FormComponent = ({isLoading, setLoading}) => {
     setButtonEnabled(false);
     console.log("button enabled: " + buttonEnabled);
 
-    if (!isInputValid || !fromValue || !toValue || fromValue == toValue){
-      alert("Input Invalid, make sure you choose the keywords from displayed card!");
+    if (!isInputValid || !fromValue || !toValue || fromValue == toValue) {
+      alert(
+        "Input Invalid, make sure you choose the keywords from displayed card!"
+      );
       return;
     }
 
@@ -168,27 +167,32 @@ const FormComponent = ({isLoading, setLoading}) => {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(data),
     })
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error("Error saving data");
+      .then((response) => response.json())
+      .then((data) => {
+        if (data.error) {
+          throw new Error(data.error);
         }
-        console.log("Data saved successfully!");
-        console.log(fromLink);
-        console.log(toLink);
+        console.log("Message from server:", data.message);
+
+        if (data.runtime) {
+          console.log("Processing time:", data.runtime);
+        }
+
+        if (data.pathsFound !== undefined) {
+          console.log("Number of paths found:", data.pathsFound);
+        }
+
+        if (data.message === "Data processed successfully!") {
+          graph();
+        }
       })
       .catch((error) => {
-        console.error("Error:", error);
+        console.error("Error:", error.message);
+      })
+      .finally(() => {
+        setLoading(false);
+        setButtonEnabled(true);
       });
-    
-  // Simulasi backend 5 detik
-    setLoading(true);
-    setTimeout(() => {
-      setLoading(false);
-      setButtonEnabled(true);
-    }, 5000);
-
-    setIsDone(true);
-    graph();
   }
 
   return (

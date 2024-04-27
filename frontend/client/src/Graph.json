@@ -1,110 +1,495 @@
 {
   "nodes": [
     {
-      "name": "Supernova"
-    },
-    {
-      "name": "Nanometre",
-      "id": "to"
-    },
-    {
-      "name": "Atom"
-    },
-    {
-      "name": "Color"
-    },
-    {
-      "name": "Light"
-    },
-    {
-      "name": "Oxygen"
-    },
-    {
-      "name": "Solar_flare"
-    },
-    {
-      "name": "Fire",
+      "name": "Illuminati",
       "id": "from"
     },
     {
-      "name": "Ammonia"
+      "name": "Barack_Obama",
+      "id": "to"
     },
     {
-      "name": "Soot"
+      "name": "FEMA_camps_conspiracy_theory"
+    },
+    {
+      "name": "Gezi_Park_protests"
+    },
+    {
+      "name": "Nibiru_cataclysm"
+    },
+    {
+      "name": "Paul_is_dead"
+    },
+    {
+      "name": "Éminence_grise"
+    },
+    {
+      "name": "Death_of_Hugo_Chávez"
+    },
+    {
+      "name": "Lavender_scare"
+    },
+    {
+      "name": "Malaysia_Airlines_Flight_17"
+    },
+    {
+      "name": "Allegations_of_Barack_Obama_spying_on_Donald_Trump"
+    },
+    {
+      "name": "Conspiracy_theory"
+    },
+    {
+      "name": "Conspiracy_theories_in_United_States_politics"
+    },
+    {
+      "name": "Gamergate_(harassment_campaign)"
+    },
+    {
+      "name": "Islamophobia"
+    },
+    {
+      "name": "QAnon"
+    },
+    {
+      "name": "Zachary_Taylor"
+    },
+    {
+      "name": "Barack_Obama_religion_conspiracy_theories"
+    },
+    {
+      "name": "Mark_Dice"
+    },
+    {
+      "name": "Roswell_incident"
+    },
+    {
+      "name": "Sovereign_citizen_movement"
+    },
+    {
+      "name": "Secrecy"
+    },
+    {
+      "name": "War_on_Islam_controversy"
+    },
+    {
+      "name": "9/11_conspiracy_theories"
+    },
+    {
+      "name": "Biden–Ukraine_conspiracy_theory"
+    },
+    {
+      "name": "HIV/AIDS_in_the_United_States"
+    },
+    {
+      "name": "Political_power"
+    },
+    {
+      "name": "Sandy_Hook_Elementary_School_shooting_conspiracy_theories"
+    },
+    {
+      "name": "Xenophobia_and_racism_related_to_the_COVID-19_pandemic"
+    },
+    {
+      "name": "Attempts_to_overturn_the_2020_United_States_presidential_election"
+    },
+    {
+      "name": "Conspiracy_theories"
+    },
+    {
+      "name": "Conspiracy_theories_in_the_Arab_world"
+    },
+    {
+      "name": "Hollywood_(film_industry)"
+    },
+    {
+      "name": "Jesuit"
+    },
+    {
+      "name": "Jesuits"
+    },
+    {
+      "name": "Vast_right-wing_conspiracy_(term)"
+    },
+    {
+      "name": "2016_Turkish_coup_d'état_attempt"
+    },
+    {
+      "name": "Barack_Obama_citizenship_conspiracy_theories"
+    },
+    {
+      "name": "Bavaria"
+    },
+    {
+      "name": "Blood_libel"
+    },
+    {
+      "name": "COVID-19_vaccine_misinformation_and_hesitancy"
+    },
+    {
+      "name": "List_of_conspiracy_theories"
+    },
+    {
+      "name": "Power_(social_and_political)"
+    },
+    {
+      "name": "Dreams_from_My_Real_Father"
+    },
+    {
+      "name": "Reptilian_conspiracy_theory"
     }
   ],
   "links": [
     {
-      "source": "Ammonia",
-      "target": "Nanometre"
+      "source": "Conspiracy_theories",
+      "target": "Barack_Obama"
     },
     {
-      "source": "Fire",
-      "target": "Solar_flare"
+      "source": "Malaysia_Airlines_Flight_17",
+      "target": "Barack_Obama"
     },
     {
-      "source": "Fire",
-      "target": "Supernova"
+      "source": "Jesuit",
+      "target": "Barack_Obama"
     },
     {
-      "source": "Supernova",
-      "target": "Nanometre"
+      "source": "Illuminati",
+      "target": "Lavender_scare"
     },
     {
-      "source": "Fire",
-      "target": "Atom"
+      "source": "Illuminati",
+      "target": "List_of_conspiracy_theories"
     },
     {
-      "source": "Fire",
-      "target": "Color"
+      "source": "Illuminati",
+      "target": "COVID-19_vaccine_misinformation_and_hesitancy"
     },
     {
-      "source": "Fire",
-      "target": "Oxygen"
+      "source": "Illuminati",
+      "target": "Death_of_Hugo_Chávez"
     },
     {
-      "source": "Solar_flare",
-      "target": "Nanometre"
+      "source": "Death_of_Hugo_Chávez",
+      "target": "Barack_Obama"
     },
     {
-      "source": "Color",
-      "target": "Nanometre"
+      "source": "Gamergate_(harassment_campaign)",
+      "target": "Barack_Obama"
     },
     {
-      "source": "Fire",
-      "target": "Light"
+      "source": "QAnon",
+      "target": "Barack_Obama"
     },
     {
-      "source": "Light",
-      "target": "Nanometre"
+      "source": "Illuminati",
+      "target": "Reptilian_conspiracy_theory"
     },
     {
-      "source": "Fire",
-      "target": "Soot"
+      "source": "Sandy_Hook_Elementary_School_shooting_conspiracy_theories",
+      "target": "Barack_Obama"
     },
     {
-      "source": "Soot",
-      "target": "Nanometre"
+      "source": "2016_Turkish_coup_d'état_attempt",
+      "target": "Barack_Obama"
     },
     {
-      "source": "Fire",
-      "target": "Ammonia"
+      "source": "9/11_conspiracy_theories",
+      "target": "Barack_Obama"
     },
     {
-      "source": "Atom",
-      "target": "Nanometre"
+      "source": "Dreams_from_My_Real_Father",
+      "target": "Barack_Obama"
     },
     {
-      "source": "Oxygen",
-      "target": "Nanometre"
+      "source": "Illuminati",
+      "target": "Gamergate_(harassment_campaign)"
+    },
+    {
+      "source": "HIV/AIDS_in_the_United_States",
+      "target": "Barack_Obama"
+    },
+    {
+      "source": "Power_(social_and_political)",
+      "target": "Barack_Obama"
+    },
+    {
+      "source": "Blood_libel",
+      "target": "Barack_Obama"
+    },
+    {
+      "source": "Illuminati",
+      "target": "Islamophobia"
+    },
+    {
+      "source": "Illuminati",
+      "target": "Sovereign_citizen_movement"
+    },
+    {
+      "source": "Illuminati",
+      "target": "9/11_conspiracy_theories"
+    },
+    {
+      "source": "Illuminati",
+      "target": "Barack_Obama_citizenship_conspiracy_theories"
+    },
+    {
+      "source": "Barack_Obama_citizenship_conspiracy_theories",
+      "target": "Barack_Obama"
+    },
+    {
+      "source": "Biden–Ukraine_conspiracy_theory",
+      "target": "Barack_Obama"
+    },
+    {
+      "source": "Barack_Obama_religion_conspiracy_theories",
+      "target": "Barack_Obama"
+    },
+    {
+      "source": "Conspiracy_theories_in_United_States_politics",
+      "target": "Barack_Obama"
+    },
+    {
+      "source": "Vast_right-wing_conspiracy_(term)",
+      "target": "Barack_Obama"
+    },
+    {
+      "source": "Illuminati",
+      "target": "Xenophobia_and_racism_related_to_the_COVID-19_pandemic"
+    },
+    {
+      "source": "Gezi_Park_protests",
+      "target": "Barack_Obama"
+    },
+    {
+      "source": "Hollywood_(film_industry)",
+      "target": "Barack_Obama"
+    },
+    {
+      "source": "Illuminati",
+      "target": "Jesuit"
+    },
+    {
+      "source": "Illuminati",
+      "target": "Sandy_Hook_Elementary_School_shooting_conspiracy_theories"
+    },
+    {
+      "source": "Illuminati",
+      "target": "Attempts_to_overturn_the_2020_United_States_presidential_election"
+    },
+    {
+      "source": "Illuminati",
+      "target": "Biden–Ukraine_conspiracy_theory"
+    },
+    {
+      "source": "Illuminati",
+      "target": "Blood_libel"
+    },
+    {
+      "source": "Conspiracy_theory",
+      "target": "Barack_Obama"
+    },
+    {
+      "source": "War_on_Islam_controversy",
+      "target": "Barack_Obama"
+    },
+    {
+      "source": "Éminence_grise",
+      "target": "Barack_Obama"
+    },
+    {
+      "source": "Attempts_to_overturn_the_2020_United_States_presidential_election",
+      "target": "Barack_Obama"
+    },
+    {
+      "source": "COVID-19_vaccine_misinformation_and_hesitancy",
+      "target": "Barack_Obama"
+    },
+    {
+      "source": "Illuminati",
+      "target": "Mark_Dice"
+    },
+    {
+      "source": "Illuminati",
+      "target": "QAnon"
+    },
+    {
+      "source": "Illuminati",
+      "target": "Vast_right-wing_conspiracy_(term)"
+    },
+    {
+      "source": "Zachary_Taylor",
+      "target": "Barack_Obama"
+    },
+    {
+      "source": "Illuminati",
+      "target": "Allegations_of_Barack_Obama_spying_on_Donald_Trump"
+    },
+    {
+      "source": "FEMA_camps_conspiracy_theory",
+      "target": "Barack_Obama"
+    },
+    {
+      "source": "Islamophobia",
+      "target": "Barack_Obama"
+    },
+    {
+      "source": "Nibiru_cataclysm",
+      "target": "Barack_Obama"
+    },
+    {
+      "source": "Lavender_scare",
+      "target": "Barack_Obama"
+    },
+    {
+      "source": "Illuminati",
+      "target": "Secrecy"
+    },
+    {
+      "source": "Xenophobia_and_racism_related_to_the_COVID-19_pandemic",
+      "target": "Barack_Obama"
+    },
+    {
+      "source": "Illuminati",
+      "target": "Éminence_grise"
+    },
+    {
+      "source": "Illuminati",
+      "target": "2016_Turkish_coup_d'état_attempt"
+    },
+    {
+      "source": "Illuminati",
+      "target": "Jesuits"
+    },
+    {
+      "source": "Illuminati",
+      "target": "Political_power"
+    },
+    {
+      "source": "Illuminati",
+      "target": "Conspiracy_theories_in_United_States_politics"
+    },
+    {
+      "source": "Illuminati",
+      "target": "Hollywood_(film_industry)"
+    },
+    {
+      "source": "Jesuits",
+      "target": "Barack_Obama"
+    },
+    {
+      "source": "Illuminati",
+      "target": "Bavaria"
+    },
+    {
+      "source": "Bavaria",
+      "target": "Barack_Obama"
+    },
+    {
+      "source": "Illuminati",
+      "target": "Barack_Obama_religion_conspiracy_theories"
+    },
+    {
+      "source": "Illuminati",
+      "target": "Gezi_Park_protests"
+    },
+    {
+      "source": "Paul_is_dead",
+      "target": "Barack_Obama"
+    },
+    {
+      "source": "Reptilian_conspiracy_theory",
+      "target": "Barack_Obama"
+    },
+    {
+      "source": "Roswell_incident",
+      "target": "Barack_Obama"
+    },
+    {
+      "source": "Secrecy",
+      "target": "Barack_Obama"
+    },
+    {
+      "source": "Conspiracy_theories_in_the_Arab_world",
+      "target": "Barack_Obama"
+    },
+    {
+      "source": "Mark_Dice",
+      "target": "Barack_Obama"
+    },
+    {
+      "source": "Illuminati",
+      "target": "Nibiru_cataclysm"
+    },
+    {
+      "source": "Illuminati",
+      "target": "Paul_is_dead"
+    },
+    {
+      "source": "Illuminati",
+      "target": "Zachary_Taylor"
+    },
+    {
+      "source": "Political_power",
+      "target": "Barack_Obama"
+    },
+    {
+      "source": "Illuminati",
+      "target": "Power_(social_and_political)"
+    },
+    {
+      "source": "Illuminati",
+      "target": "Roswell_incident"
+    },
+    {
+      "source": "Illuminati",
+      "target": "Conspiracy_theories_in_the_Arab_world"
+    },
+    {
+      "source": "Illuminati",
+      "target": "Dreams_from_My_Real_Father"
+    },
+    {
+      "source": "Illuminati",
+      "target": "Malaysia_Airlines_Flight_17"
+    },
+    {
+      "source": "List_of_conspiracy_theories",
+      "target": "Barack_Obama"
+    },
+    {
+      "source": "Illuminati",
+      "target": "HIV/AIDS_in_the_United_States"
+    },
+    {
+      "source": "Sovereign_citizen_movement",
+      "target": "Barack_Obama"
+    },
+    {
+      "source": "Illuminati",
+      "target": "War_on_Islam_controversy"
+    },
+    {
+      "source": "Allegations_of_Barack_Obama_spying_on_Donald_Trump",
+      "target": "Barack_Obama"
+    },
+    {
+      "source": "Illuminati",
+      "target": "Conspiracy_theories"
+    },
+    {
+      "source": "Illuminati",
+      "target": "Conspiracy_theory"
+    },
+    {
+      "source": "Illuminati",
+      "target": "FEMA_camps_conspiracy_theory"
     }
   ],
   "details": [
     {
-      "runtime": "8.5693162s"
+      "runtime": "17.969959375s"
     },
     {
-      "totalpath": "8"
+      "totalpath": "43"
     }
   ]
 }

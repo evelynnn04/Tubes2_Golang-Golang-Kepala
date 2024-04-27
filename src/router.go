@@ -26,7 +26,6 @@ func main() {
 		ExposeHeaders:    []string{"Content-Length"},
 		AllowCredentials: true,
 	}))
-
 	router.POST("/save-data", func(c *gin.Context) {
 		var data FrontendFormData
 
@@ -37,17 +36,33 @@ func main() {
 
 		if data.Method == "ids" {
 			start := time.Now()
-			if paths, found := functions.IDSMultiplePaths(data.From, data.To, 6); found {
-				end := time.Now()
-				runtime := end.Sub(start)
+			paths, found := functions.IDSMultiplePaths(data.From, data.To, 6)
+			end := time.Now()
+			runtime := end.Sub(start)
+
+			if found {
 				err := functions.DataIntoJson(paths, "../frontend/client/src/Graph.json", runtime, fmt.Sprint(len(paths)))
 				if err != nil {
-					fmt.Println("Error creating JSON:", err)
+					c.JSON(http.StatusInternalServerError, gin.H{"message": "Error saving data", "error": err.Error()})
+					return
 				}
-			}
-		}
 
-		c.JSON(http.StatusOK, gin.H{"message": "Data saved successfully!"})
+				//Kalo sukses kirim ini
+				c.JSON(http.StatusOK, gin.H{
+					"message":    "Data processed successfully!",
+					"runtime":    runtime.String(),
+					"pathsFound": len(paths),
+				})
+			} else {
+				// Kalo gagal
+				c.JSON(http.StatusNotFound, gin.H{
+					"message": "No paths found between the specified nodes",
+					"runtime": runtime.String(),
+				})
+			}
+		} else {
+			c.JSON(http.StatusOK, gin.H{"message": "Request completed without IDS processing"})
+		}
 	})
 
 	router.Run()
