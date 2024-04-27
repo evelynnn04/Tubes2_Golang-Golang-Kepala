@@ -1,0 +1,21 @@
+{
+  "name": "tubes2_golang-golang-kepala",
+  "version": "1.0.0",
+  "description": "",
+  "main": "script.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "nodemon server.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "d3": "^7.9.0",
+    "express": "^4.19.2",
+    "node-fetch": "^3.3.2",
+    "nodemon": "^3.1.0",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0"
+  }
+}

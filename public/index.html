@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <title>Document</title>
+</head>
+<body>
+    <div class="container">
+        <div id="content-top">
+            <h1>WIKIRACE</h1> 
+            <h2>Presented by Golang-Golang Kepala</h2>
+        </div>
+        <div id="content-bottom">
+            <div id="content-bottom-left">
+                <form action="">
+                    <label for="from-field">From</label> <br>
+                    <input type="text" id="from-field" name="From" placeholder="Enter text here"><br>
+                    <label for="to-field">To</label> <br>
+                    <input type="text" id="to-field" name="To" placeholder="Enter text here"> <br>
+                    <button type="button" onclick="clickFunction()">Find</button>
+                </form>
+            </div>
+            <div id="content-bottom-right">
+                <div id="canvas-container">
+                    <svg id="canvas"></svg>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <script src="script.js" type="text/javascript"></script>
+</body>
+</html>

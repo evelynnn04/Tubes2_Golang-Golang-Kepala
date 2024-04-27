@@ -1,0 +1,90 @@
+.inknut-antiqua-light {
+  font-family: "Inknut Antiqua", serif;
+  font-weight: 300;
+  font-style: normal;
+}
+
+.grid-container {
+  z-index: 2;
+  position: relative;
+  display: grid;
+  grid-template-columns: 1fr 2fr;
+  grid-template-rows: 1.1fr 2fr; 
+  height: 100vh;
+  grid-template-areas:
+    "title title"
+    "form canvas";
+}
+
+.title {
+  grid-area: title;
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  width: 100%;
+}
+
+.form-container {
+  grid-area: form;
+  width: 80%;
+  height: 80%;
+  margin-right: 0;
+  display: flex;
+  flex: 2;
+  flex-direction:column-reverse;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+}
+
+.canvas-container {
+  width: 70%;;
+  height: 80%;
+  grid-area: canvas;
+  display: flex;
+  flex: 2;
+  justify-content: center;
+  align-items: center;
+  background-color: #FFFCFC;
+  border: 1px solid black;
+  border-radius: 15px;
+  box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.2);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+
+.particles {
+  z-index: -1;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.app-container {
+  position: relative;
+}
+
+.loading-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  /* background-color: rgba(255, 255, 255, 0.7);  */
+  z-index: 999; 
+}
+
+.loading-overlay img {
+  width: 10%; 
+  height: auto;
+}
