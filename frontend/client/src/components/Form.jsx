@@ -4,8 +4,7 @@ import { useState, useEffect } from "react";
 import MethodComponent from "./MethodOption";
 import "./Form.css";
 import * as d3 from "d3";
-// import graphJson from '../Graph.json';
-import Result from "./Result.jsx";
+
 
 // Gambar grafik multiple solution
 function graph(graphData) {
@@ -14,7 +13,7 @@ function graph(graphData) {
   const height = canvas.clientHeight;
 
   const svg = d3.select("#canvas").html("");
-  // const radius = width / (graphData.nodes.length * 20);
+  const radius = width / (graphData.nodes.length * 20);
 
   // Gambar line
   const link = svg
@@ -35,8 +34,8 @@ function graph(graphData) {
     .append("circle")
     .attr("fill", (d) =>
       d.id === "from" || d.id === "to" ? "#000000" : "#c5c6c7"
-    );
-  // .attr("r", radius);
+    )
+    .attr("r", radius);
 
   // Gambar text
   const nodeNameText = svg
@@ -120,7 +119,7 @@ const fetchData = async () => {
     }
     const data = await response.json();
     setGraphData(data);
-    graph(data); // Assuming you want to call graph here
+    graph(data); 
   } catch (error) {
     console.error("Failed to fetch graph data:", error);
   }
@@ -133,21 +132,20 @@ const FormComponent = ({ isLoading, setLoading }) => {
   const [isDone, setIsDone] = useState(false);
   const [buttonEnabled, setButtonEnabled] = useState(true);
   const [graphData, setGraphData] = useState(null);
+  var [runtime, setRuntime] = useState(null);
+  var [result, setResult] = useState(null);
 
   const methodOptions = [
     { value: "bfs", text: "BFS" },
     { value: "ids", text: "IDS" },
   ];
 
-  // Function to fetch graph data
   useEffect(() => {
     if (graphData) {
-      graph(graphData); // Call graph when graphData is updated
+      graph(graphData);
     }
   }, [graphData]);
 
-  // Function to handle form submission
-  // Function to handle form submission
   async function handleSubmit() {
     const fromLink = makeLink(fromValue);
     const toLink = makeLink(toValue);
@@ -174,8 +172,9 @@ const FormComponent = ({ isLoading, setLoading }) => {
       .then((response) => response.json())
       .then((data) => {
         if (data) {
-          // Assuming the data returned from the server is the graph data you need
-          setGraphData(data); // Set the received JSON data to graphData state
+          setGraphData(data); 
+          setRuntime(data.details[0].runtime);
+          setResult(data.details[1].totalpath)
         }
       })
       .catch((error) => {
@@ -184,10 +183,10 @@ const FormComponent = ({ isLoading, setLoading }) => {
       .finally(() => {
         setLoading(false);
         setButtonEnabled(true);
+        setIsDone(true);
       });
   }
 
-  // Function to generate link
   function makeLink(str) {
     const temp = str.replace(/\s+/g, "_");
     const link = "https://en.wikipedia.org/wiki/" + temp;
@@ -235,7 +234,9 @@ const FormComponent = ({ isLoading, setLoading }) => {
           Find!
         </button>
       </div>
-      {isDone && <Result />}
+      {isDone && 
+        <p>Runtime : {runtime} Result: {result}</p>
+      }
     </form>
   );
 };
