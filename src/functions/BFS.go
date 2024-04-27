@@ -1,8 +1,6 @@
 package functions
 
 import (
-	"fmt"
-
 	"github.com/evelynnn04/Tubes2_Golang-Golang-Kepala/src/datastructure"
 )
 
@@ -36,9 +34,6 @@ func BFS(startURL, goalURL string) (datastructure.Graph, bool) {
 	g := datastructure.NewDirectedGraph()
 	g.AddVertex(startURL)
 
-	// Current vertex is the startURL
-	currentVertex := g.Vertices[startURL]
-
 	// Queue init
 	vertexQueue := queue{}
 
@@ -47,14 +42,23 @@ func BFS(startURL, goalURL string) (datastructure.Graph, bool) {
 
 	// found status init
 	isFound := false
+
+	// current URL init
+	var currentVertex *datastructure.Vertex = nil
+	var currentURL string
+	if(currentVertex == nil) {
+		currentURL = startURL
+	} else {
+		currentURL = currentVertex.Key
+	}
 	
 	// if found then stop, else keep scraping to the eternity...
 	for !isFound {
 		// scrape links from currentVertex
-		var links []string = Scrape(currentVertex.Key)
+		var links []string = Scrape(currentURL)
 
 		// add currentVertex to visited
-		visitedVertices[currentVertex.Key] = true
+		visitedVertices[currentURL] = true
 
 		// add links as child to currentVertex
 		for _, link := range links {
@@ -62,20 +66,20 @@ func BFS(startURL, goalURL string) (datastructure.Graph, bool) {
 			g.AddVertex(link)
 
 			// assign it as child
-			g.AddEdge(currentVertex.Key, link)
+			g.AddEdge(currentURL, link)
 		}
 
+		// init current vertex
+		currentVertex = g.Vertices[currentURL]
+
 		// enqueue child if not visited
-		for i, v := range currentVertex.Vertices {
+		for _, v := range currentVertex.Vertices {
 			if !visitedVertices[v.Key] {
-				fmt.Println(vertexQueue)
-				fmt.Printf("QUEUE: %s\n", i)
 				vertexQueue.enqueue(v)
 			}
 		}
-		fmt.Println(vertexQueue)
 
-		// dequeue processed links
+		// dequeue processed links and update the current URL
 		currentVertex = vertexQueue.dequeue()
 
 		// if the address is nil tell the program to panic
@@ -84,7 +88,7 @@ func BFS(startURL, goalURL string) (datastructure.Graph, bool) {
 		}
 		
 		// if found change the status
-		if currentVertex.Key == goalURL {
+		if currentURL == goalURL {
 			isFound = true
 		}
 	}
