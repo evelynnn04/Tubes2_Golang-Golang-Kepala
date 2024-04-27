@@ -9,7 +9,7 @@
   position: relative;
   display: grid;
   grid-template-columns: 1fr 2fr;
-  grid-template-rows: 1.1fr 2fr; 
+  grid-template-rows: 1fr 2fr; 
   height: 100vh;
   grid-template-areas:
     "title title"
@@ -41,20 +41,18 @@
 }
 
 .canvas-container {
-  width: 70%;;
-  height: 80%;
   grid-area: canvas;
   display: flex;
-  flex: 2;
   justify-content: center;
   align-items: center;
   background-color: #FFFCFC;
   border: 1px solid black;
   border-radius: 15px;
   box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.2);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+  position: relative;
+  margin-bottom: 50px;
+  margin-right: 50px;
+  margin-left: 50px;
 }
 
 
@@ -75,16 +73,15 @@
   position: absolute;
   top: 0;
   left: 0;
-  width: 100%;
-  height: 100%;
+  width: 100%; 
+  height: 100%; 
   display: flex;
   justify-content: center;
   align-items: center;
-  /* background-color: rgba(255, 255, 255, 0.7);  */
   z-index: 999; 
 }
 
 .loading-overlay img {
-  width: 10%; 
+  width: 50%; 
   height: auto;
 }

@@ -13,24 +13,6 @@ type State struct {
 	Path []string
 }
 
-func isPathInPaths(paths [][]string, path []string) bool {
-	for _, p := range paths {
-		if len(p) == len(path) {
-			match := true
-			for i := range p {
-				if p[i] != path[i] {
-					match = false
-					break
-				}
-			}
-			if match {
-				return true
-			}
-		}
-	}
-	return false
-}
-
 func successors(state State) []State {
 	links, err := Scrape(state.URL)
 	if err != nil {

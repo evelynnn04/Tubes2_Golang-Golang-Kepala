@@ -1,11 +1,11 @@
 import React from "react";
-import {InputComponent, isInputValid} from "./InputComponent";
+import { InputComponent, isInputValid } from "./InputComponent";
 import { useState, useEffect } from "react";
 import MethodComponent from "./MethodOption";
 import "./Form.css";
 import * as d3 from "d3";
 // import graphJson from '../Graph.json';
-import Result from "./Result.jsx"
+import Result from "./Result.jsx";
 
 // Gambar grafik multiple solution
 function graph(graphData) {
@@ -35,8 +35,8 @@ function graph(graphData) {
     .append("circle")
     .attr("fill", (d) =>
       d.id === "from" || d.id === "to" ? "#000000" : "#c5c6c7"
-    )
-    // .attr("r", radius);
+    );
+  // .attr("r", radius);
 
   // Gambar text
   const nodeNameText = svg
@@ -51,39 +51,37 @@ function graph(graphData) {
     .style("font-size", "12px")
     .style("fill", (d) =>
       d.id === "from" || d.id === "to" ? "#000000" : "#c5c6c7"
-    )
+    );
 
-  let zoom = d3.zoom()
-  .on('zoom', handleZoom);
+  let zoom = d3.zoom().on("zoom", handleZoom);
 
   function handleZoom(e) {
     const currentTransform = e.transform;
     const radius = 5 * currentTransform.k;
-  
-    d3.selectAll('line')
-      .attr('x1', (d) => currentTransform.applyX(d.source.x))
-      .attr('y1', (d) => currentTransform.applyY(d.source.y))
-      .attr('x2', (d) => currentTransform.applyX(d.target.x))
-      .attr('y2', (d) => currentTransform.applyY(d.target.y));
-  
-    d3.selectAll('circle')
-      .attr('cx', (d) => currentTransform.applyX(d.x))
-      .attr('cy', (d) => currentTransform.applyY(d.y))
-      .attr('r', radius);
-  
-    d3.selectAll('text')
-      .attr('x', (d) => currentTransform.applyX(d.x))
-      .attr('y', (d) => currentTransform.applyY(d.y) + 10)
-      .style('font-size', `${12 * currentTransform.k}px`); 
+
+    d3.selectAll("line")
+      .attr("x1", (d) => currentTransform.applyX(d.source.x))
+      .attr("y1", (d) => currentTransform.applyY(d.source.y))
+      .attr("x2", (d) => currentTransform.applyX(d.target.x))
+      .attr("y2", (d) => currentTransform.applyY(d.target.y));
+
+    d3.selectAll("circle")
+      .attr("cx", (d) => currentTransform.applyX(d.x))
+      .attr("cy", (d) => currentTransform.applyY(d.y))
+      .attr("r", radius);
+
+    d3.selectAll("text")
+      .attr("x", (d) => currentTransform.applyX(d.x))
+      .attr("y", (d) => currentTransform.applyY(d.y) + 10)
+      .style("font-size", `${12 * currentTransform.k}px`);
   }
-    
+
   function initZoom() {
-    d3.select('svg')
-      .call(zoom);
+    d3.select("svg").call(zoom);
   }
 
   initZoom();
-  
+
   function ticked() {
     link
       .attr("x1", (d) => d.source.x)
@@ -110,9 +108,23 @@ function graph(graphData) {
     const newWidth = canvas.clientWidth;
     const newHeight = canvas.clientHeight;
     simulation.force("center", d3.forceCenter(newWidth / 2, newHeight / 3));
-    simulation.alpha(1).restart(); 
+    simulation.alpha(1).restart();
   });
 }
+
+const fetchData = async () => {
+  try {
+    const response = await fetch("../Graph.json");
+    if (!response.ok) {
+      throw new Error(`Failed to fetch: ${response.statusText}`);
+    }
+    const data = await response.json();
+    setGraphData(data);
+    graph(data); // Assuming you want to call graph here
+  } catch (error) {
+    console.error("Failed to fetch graph data:", error);
+  }
+};
 
 const FormComponent = ({ isLoading, setLoading }) => {
   const [selectedMethod, setSelectedMethod] = useState("bfs");
@@ -129,21 +141,21 @@ const FormComponent = ({ isLoading, setLoading }) => {
 
   // Function to fetch graph data
   useEffect(() => {
-    async function fetchData() {
-      const response = await fetch('../Graph.json');
-      const data = await response.json();
-      setGraphData(data);
+    if (graphData) {
+      graph(graphData); // Call graph when graphData is updated
     }
-    fetchData();
-  }, []);
+  }, [graphData]);
 
+  // Function to handle form submission
   // Function to handle form submission
   async function handleSubmit() {
     const fromLink = makeLink(fromValue);
     const toLink = makeLink(toValue);
 
     if (!isInputValid || !fromValue || !toValue || fromValue === toValue) {
-      alert("Input Invalid, make sure you choose the keywords from displayed card!");
+      alert(
+        "Input Invalid, make sure you choose the keywords from displayed card!"
+      );
       return;
     }
 
@@ -161,22 +173,9 @@ const FormComponent = ({ isLoading, setLoading }) => {
     })
       .then((response) => response.json())
       .then((data) => {
-        if (data.error) {
-          throw new Error(data.error);
-        }
-        console.log("Message from server:", data.message);
-
-        if (data.runtime) {
-          console.log("Processing time:", data.runtime);
-        }
-
-        if (data.pathsFound !== undefined) {
-          console.log("Number of paths found:", data.pathsFound);
-        }
-
-        if (data.message === "Data processed successfully!") {
-          // Call the graph function after fetching the data
-          graph(graphData);
+        if (data) {
+          // Assuming the data returned from the server is the graph data you need
+          setGraphData(data); // Set the received JSON data to graphData state
         }
       })
       .catch((error) => {
@@ -186,8 +185,6 @@ const FormComponent = ({ isLoading, setLoading }) => {
         setLoading(false);
         setButtonEnabled(true);
       });
-
-    setIsDone(true);
   }
 
   // Function to generate link
@@ -244,6 +241,3 @@ const FormComponent = ({ isLoading, setLoading }) => {
 };
 
 export default FormComponent;
-
-
-
