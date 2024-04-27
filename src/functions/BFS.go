@@ -1,6 +1,8 @@
 package functions
 
 import (
+	"fmt"
+
 	"github.com/evelynnn04/Tubes2_Golang-Golang-Kepala/src/datastructure"
 )
 
@@ -29,7 +31,7 @@ func (q *queue) dequeue() *datastructure.Vertex {
 	}
 }
 
-func BFS(startURL, goalURL string) (datastructure.Graph, bool) {
+func BFS(startURL, goalURL string) ([][]string, bool) {
 	// Graph init for stroring links
 	g := datastructure.NewDirectedGraph()
 	g.AddVertex(startURL)
@@ -38,7 +40,13 @@ func BFS(startURL, goalURL string) (datastructure.Graph, bool) {
 	vertexQueue := queue{}
 
 	// visited init
-	visitedVertices := map[string]bool{}
+	visitedVertices := make(map[string]bool)
+
+	// path init
+	var path [][]string
+
+	// state init
+	// startState := State{URL: startURL, Path: []string{startURL}}
 
 	// found status init
 	isFound := false
@@ -46,16 +54,20 @@ func BFS(startURL, goalURL string) (datastructure.Graph, bool) {
 	// current URL init
 	var currentVertex *datastructure.Vertex = nil
 	var currentURL string
-	if(currentVertex == nil) {
-		currentURL = startURL
-	} else {
-		currentURL = currentVertex.Key
-	}
-	
+
 	// if found then stop, else keep scraping to the eternity...
 	for !isFound {
+		if(currentVertex == nil) {
+			currentURL = startURL
+		} else {
+			currentURL = currentVertex.Key
+		}
 		// scrape links from currentVertex
-		var links []string = Scrape(currentURL)
+		links, err := Scrape(currentURL)
+		if err != nil {
+			fmt.Println("Error scraping:", err)
+			return nil, false
+		}
 
 		// add currentVertex to visited
 		visitedVertices[currentURL] = true
@@ -64,6 +76,7 @@ func BFS(startURL, goalURL string) (datastructure.Graph, bool) {
 		for _, link := range links {
 			// create new vertex
 			g.AddVertex(link)
+			fmt.Println(link)
 
 			// assign it as child
 			g.AddEdge(currentURL, link)
@@ -92,5 +105,5 @@ func BFS(startURL, goalURL string) (datastructure.Graph, bool) {
 			isFound = true
 		}
 	}
-	return *g, isFound
+	return path, isFound
 }

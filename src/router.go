@@ -61,7 +61,31 @@ func main() {
 				})
 			}
 		} else {
-			c.JSON(http.StatusOK, gin.H{"message": "Request completed without IDS processing"})
+			start := time.Now()
+			paths, found := functions.BFS(data.From, data.To)
+			end := time.Now()
+			runtime := end.Sub(start)
+
+			if found {
+				err := functions.DataIntoJson(paths, "../frontend/client/src/Graph.json", runtime, fmt.Sprint(len(paths)))
+				if err != nil {
+					c.JSON(http.StatusInternalServerError, gin.H{"message": "Error saving data", "error": err.Error()})
+					return
+				}
+
+				//Kalo sukses kirim ini
+				c.JSON(http.StatusOK, gin.H{
+					"message":    "Data processed successfully!",
+					"runtime":    runtime.String(),
+					"pathsFound": len(paths),
+				})
+			} else {
+				// Kalo gagal
+				c.JSON(http.StatusNotFound, gin.H{
+					"message": "No paths found between the specified nodes",
+					"runtime": runtime.String(),
+				})
+			}
 		}
 	})
 
