@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import MethodComponent from "./MethodOption";
 import "./Form.css";
 import * as d3 from "d3";
+import { set } from "lodash";
 
 // Gambar grafik multiple solution
 function graph(graphData) {
@@ -158,6 +159,7 @@ const FormComponent = ({ isLoading, setLoading }) => {
       return;
     }
 
+    setButtonEnabled(false);
     setLoading(true);
     const data = {
       method: selectedMethod,
