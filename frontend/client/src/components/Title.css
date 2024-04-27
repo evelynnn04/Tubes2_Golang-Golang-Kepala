@@ -1,0 +1,25 @@
+.title-container {
+  border: 2px solid black;
+  border-radius: 10px;
+  padding: 10px 20px;
+  display: inline-block;
+  margin: 0;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+  background-color: #FFFCFC;
+}
+
+.title {
+  font-family: "Inknut Antiqua";
+  font-size: 80px;
+  text-align: center;
+  margin: 0;
+  font-weight: 200;
+  line-height: 1.5;
+}
+
+.subtitle {
+  font-family: "Inknut Antiqua";
+  font-size: 18px;
+  text-align: center;
+  margin: 10px 0 0;
+}

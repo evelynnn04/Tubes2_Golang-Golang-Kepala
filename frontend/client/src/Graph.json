@@ -1,0 +1,26 @@
+{
+  "nodes": [
+    {
+      "name": "Joko_Widodo",
+      "id": "from"
+    },
+    {
+      "name": "Russia",
+      "id": "to"
+    }
+  ],
+  "links": [
+    {
+      "source": "Joko_Widodo",
+      "target": "Russia"
+    }
+  ],
+  "details": [
+    {
+      "runtime": "181.208167ms"
+    },
+    {
+      "totalpath": "1"
+    }
+  ]
+}

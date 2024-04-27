@@ -1,0 +1,76 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  width: 100%;
+  /* justify-content: center; */
+}
+
+.top {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  align-self: center;
+}
+
+.input-label {
+  font-family: "Inknut Antiqua", serif;
+  color: #0563c1;
+  font-size: 1.5rem;
+  font-weight: 700;
+  display: block;
+  margin-bottom: 0.25rem;
+  text-align: left;
+}
+
+.find-button {
+  background-color: #0563c1;
+  border: none;
+  color: white;
+  padding: 10px 20px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  margin: 4px 2px;
+  cursor: pointer;
+  border-radius: 12px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
+  align-self: center;
+}
+
+.find-button:hover {
+  background-color: #805cb4;
+}
+
+.find-button:active {
+  background-color: #306eff;
+  box-shadow: 0 2px #666;
+  transform: translateY(2px), translateX(2px);
+}
+
+.find-button:disabled {
+  background-color: #ccc; 
+  color: #666; 
+  cursor: not-allowed;
+}
+
+.runtime-result-container {
+  margin-top: 20px;
+  display: flex;
+  flex-direction: column; 
+  align-items: flex-start;
+  font-family: 'Arial', sans-serif;
+  color: #805CB4;
+  gap: 0.5rem;
+}
+
+.runtime-result-text {
+  margin: 0;
+  font-size: 18px;
+}
+
+.runtime-result-bold {
+  font-weight: bold;
+}
