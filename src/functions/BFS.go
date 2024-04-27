@@ -5,22 +5,6 @@ import (
 	"sync"
 )
 
-// func successors(state State) []State {
-// 	links, err := Scrape(state.URL) // Assume Scrape is defined elsewhere and returns ([]string, error)
-// 	if err != nil {
-// 		fmt.Println("Error scraping:", err)
-// 		return nil
-// 	}
-// 	var states []State
-// 	for _, link := range links {
-// 		newPath := make([]string, len(state.Path))
-// 		copy(newPath, state.Path)
-// 		newPath = append(newPath, link)
-// 		states = append(states, State{URL: link, Path: newPath})
-// 	}
-// 	return states
-// }
-
 func existGoal(queue []State, goalURL string) bool {
 	for _, state := range queue {
 		if state.URL == goalURL {
